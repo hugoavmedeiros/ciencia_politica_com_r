@@ -11,9 +11,9 @@ bootsDistNormal10 <- replicate(10, sample(distNormalSimulacao, 10, replace = TRU
 bootsDistNormal10
 
 # calculando uma estatística com bootstrapping (10 amostras)
-mediaBootsNormal10 <-replicate(10, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 10 amostras de 10 casos
-mediaBootsNormal50 <-replicate(50, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 50 amostras de 10 casos
-mediaBootsNormal100 <-replicate(100, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 100 amostras de 10 casos
+mediaBootsNormal10 <- replicate(10, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 10 amostras de 10 casos
+mediaBootsNormal50 <- replicate(50, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 50 amostras de 10 casos
+mediaBootsNormal100 <- replicate(100, mean(sample(distNormalSimulacao, 10, replace = TRUE))) # calculamos a média de 100 amostras de 10 casos
 
 # vamos comparar???
 mean(mediaBootsNormal10) # media do boostraping 10
