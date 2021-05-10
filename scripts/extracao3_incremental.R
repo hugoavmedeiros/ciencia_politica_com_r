@@ -13,9 +13,9 @@ chamadosTempoRealIncremento <- (!chamadosTempoRealNew$processo_numero %in% chama
 
 # compara usando a chave substituta
 # criar a chave substituta
-chamadosTempoReal$chaveSubstituta = apply(chamadosTempoReal[, c(1,2,4,5)], MARGIN = 1, FUN = function(i) paste(i, collapse = ""))
+chamadosTempoReal$chaveSubstituta = apply(chamadosTempoReal[, c(4,5)], MARGIN = 1, FUN = function(i) paste(i, collapse = ""))
 
-chamadosTempoRealNew$chaveSubstituta = apply(chamadosTempoRealNew[, c(1,2,4,5)], MARGIN = 1, FUN = function(i) paste(i, collapse = ""))
+chamadosTempoRealNew$chaveSubstituta = apply(chamadosTempoRealNew[, c(4,5)], MARGIN = 1, FUN = function(i) paste(i, collapse = ""))
 
 # cria base de comparação
 chamadosTempoRealIncremento <- (!chamadosTempoRealNew$chaveSubstituta %in% chamadosTempoReal$chaveSubstituta)
