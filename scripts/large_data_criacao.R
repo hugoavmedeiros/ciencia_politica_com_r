@@ -21,7 +21,7 @@ write.table(largeData,"bases_originais/largeData.csv",sep=",",row.names=FALSE,qu
 
 # versão menor
 
-casos= 1e6 # reduza os números antes e depois do e, caso esteja difícil de computar # mas tente manter pelo menos 1e6, para garantir o efeito se large data
+casos= 9e6 # reduza os números antes e depois do e, caso esteja difícil de computar # mas tente manter pelo menos 1e6, para garantir o efeito se large data
 
 # cria o data.frame com o total de casos definido acima
 largeData1 = data.table(a=rpois(casos, 3),

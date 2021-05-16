@@ -21,10 +21,16 @@ extracaoLD4Amostra <- extracaoLD4[sample(nrow(extracaoLD4), 100000) , ]
 
 lm(c ~ ., extracaoLD4Amostra) # aí, funciona!!!
 
-system.time(extracaoLD5 <- read.csv.ffdf(file='bases_originais/Activity recognition exp/Phones_accelerometer.csv'))
+system.time(extracaoLD5 <- read.csv.ffdf(file='bases_originais/Phones_accelerometer.csv'))
 
-system.time(extracaoLD6 <- read.csv.ffdf(file='bases_originais/Activity recognition exp/Phones_gyroscope.csv'))
+length(extracaoLD5$Model)
 
-extracaoMerge <- ffdfrbind.fill(extracaoLD5, extracaoLD6) # junta bases semelhantes forçando preenchimento
+system.time(extracaoLD6 <- read.csv.ffdf(file='bases_originais/Phones_gyroscope.csv'))
+
+length(extracaoLD6$Model)
 
 extracaoMerge <- ffdfappend(extracaoLD5, extracaoLD6) # junta bases semelhantes
+
+#extracaoMerge <- ffdfrbind.fill(extracaoLD5, extracaoLD6) # junta bases semelhantes forçando preenchimento
+
+length(extracaoMerge$Model)
