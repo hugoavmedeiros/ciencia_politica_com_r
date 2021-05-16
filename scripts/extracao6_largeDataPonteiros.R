@@ -1,4 +1,5 @@
 library(ff)
+library(ffbase)
 
 enderecoBase <- 'bases_originais/largeData.csv'
 
@@ -19,3 +20,11 @@ lm(c ~ ., extracaoLD4) ## não vai rodar!!!! o vetor de computação será mt gr
 extracaoLD4Amostra <- extracaoLD4[sample(nrow(extracaoLD4), 100000) , ]
 
 lm(c ~ ., extracaoLD4Amostra) # aí, funciona!!!
+
+system.time(extracaoLD5 <- read.csv.ffdf(file='bases_originais/Activity recognition exp/Phones_accelerometer.csv'))
+
+system.time(extracaoLD6 <- read.csv.ffdf(file='bases_originais/Activity recognition exp/Phones_gyroscope.csv'))
+
+extracaoMerge <- ffdfrbind.fill(extracaoLD5, extracaoLD6) # junta bases semelhantes forçando preenchimento
+
+extracaoMerge <- ffdfappend(extracaoLD5, extracaoLD6) # junta bases semelhantes

@@ -31,3 +31,9 @@ tabelaBrasileirao <- data.frame(
   time = timestamp())
 
 write.csv2(tabelaBrasileirao, 'tabelaBrasileirao.csv')
+
+# tabelas da globo.com
+url <- "https://globoesporte.globo.com/futebol/futebol-internacional/futebol-espanhol/"
+
+stock <- read_html("https://globoesporte.globo.com/futebol/futebol-internacional/futebol-espanhol/") %>% 
+  html_nodes(xpath = "//*[@id='classificacao__wrapper']/section/ul/li[1]") %>% html_text()
