@@ -4,7 +4,7 @@ library(dplyr)
 irisDT <- iris %>% setDT()
 class(irisDT)
 
-irisDT[species == 'setosa', ] #i, j, by
+irisDT[species == 'setosa', ] # i, j, by
 
 irisDT[species != 'setosa', ]
 
