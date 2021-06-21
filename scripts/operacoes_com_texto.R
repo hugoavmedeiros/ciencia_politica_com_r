@@ -1,5 +1,14 @@
+library(electionsBR)
+library(dplyr)
+library(stringr)
+library(tidyr)
+
 ## Exemplo do Handling Strings with R
 states <- rownames(USArrests)
+
+set1 <- c("some", "random", "words", "some")
+set2 <- c("some", "many", "none", "few")
+
 grep(pattern = "k", x = states, value = TRUE) # estados com k no nome
 grep(pattern = "^[wW]", x = states, value = TRUE) # estados que começam com w ou W
 
@@ -10,16 +19,13 @@ toupper(states) # maiúsculas
 
 abbreviate(states, minlength = 3, method = "both.sides") # abrevia reduzindo a 3 letras, pelos dois lados
 
-set1 <- c("some", "random", "words", "some")
-set2 <- c("some", "many", "none", "few")
+str_replace_all(string = set1, pattern = "s", replacement = " ") # modifica um padrão # no caso, retiramos a letra 's'
 
 union(set1, set2) # união 
 
 ## outas funções: intersect, setdiff...
 
 set2 %in% set1 # faz uma busca de um vetor de texto em outro
-
-str_replace_all(string = set1, pattern = "s", replacement = " ") # modifica um padrão # no caso, retiramos a letra 's'
 
 ## extraindo partes de acordo com delimitador
 
@@ -28,5 +34,5 @@ sub(" =>.*", "", exString1) # extrair antes do separador
 sub(".*=> ", "", exString1) # extrair depois do separador
 
 ## extraindo partes com regex
-teste <- c('81 32364555', '87 32456712', '81 987251232')
-str_extract_all(teste , "\\d{2}\\s\\d+")
+teste <- c('81 32364555', '87 32456712', '81 987251232', '50619-322')
+str_extract_all(teste, "\\d{2}\\s\\d+")

@@ -2,7 +2,7 @@ library(electionsBR)
 library(dplyr)
 library(tidyr)
 
-tse20<-vote_mun_zone_local(year = 2020)
+tse20 <- vote_mun_zone_local(year = 2020)
 
 partidos_bolsonaro <- c("AVANTE", 'DC', "DEM", 'MDB', 'NOVO', 'PATRI', 'PL', 'PODE', 'PP', 'PROS', 'PRTB', 'PSC', 'PSD', 'PSDB', 'PSL', 'PTB', 'SD')
 
