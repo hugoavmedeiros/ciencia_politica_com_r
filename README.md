@@ -1,6 +1,23 @@
-# etl_com_r
-materiais do curso de Introdução ao R do professor Hugo Medeiros, com foco em extração, transformação e leitura
+# ETL com R
+## Extração, Transformação e Leitura com linguagem R 
 
-Atualmente, o curso está acontecendo no/a:
+### O que é?
+Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a> . 
 
-Programa de Pós-graduação em Ciência Política (PPGCP), na disciplina Tópicos Especiais de metodologia: Eletiva de análise de dados (2021-01)
+### Temáticas abordadas
+* Introdução ao R
+* Programação em R
+* Extração, Transformação e Leitura - ETL
+* Descoberta, Estruturação, Limpeza, Enriquecimento e Validação com Dplyr
+* Valores Ausentes, Outliers e Imputação
+* ETL de Textos com R
+* ETL de Datas com R
+
+### Turmas atuais
+
+* 2021-02 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
+
+### Turmas Anteriores
+* 2021-01 Tópicos Especiais de metodologia: Eletiva de análise de dados (ME/DO), no Programa de Pós-graduação em Ciência Política (PPGCP) da Universidade Federal de Pernambuco (UFPE)
+* 2020-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
+* 2019-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
