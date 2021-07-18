@@ -14,7 +14,8 @@ Materiais do curso de ETL com R do professor Hugo Medeiros.
 * ETL de Datas com R
 
 ### Turmas atuais
-Atualmente, o curso está acontecendo no/a:
+
+* 2021-02 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
 
 ### Turmas Anteriores
 * 2019-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
