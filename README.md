@@ -2,7 +2,7 @@
 ## Extração, Transformação e Leitura com linguagem R 
 
 ### O que é?
-Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/"  target="_blank"><b>Hugo Medeiros</b></a> . 
+Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a> . 
 
 ### Temáticas abordadas
 * Introdução ao R
