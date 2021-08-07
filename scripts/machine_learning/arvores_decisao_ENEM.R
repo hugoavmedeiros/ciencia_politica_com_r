@@ -3,7 +3,11 @@
 # pacotes
 pacman::p_load(ade4, car, caret, chunked, data.table, data.tree, dplyr, ff, ffbase, foreign, funModeling, ggparty, ggplot2, ggtree, gplots, LaF, Metrics, party, partykit, permimp,plm, randomForest, rattle, readr, REEMtree, sqldf) # usando o p_load do pacman vc garante que 1) se o pacote estiver instalado, será carregado 2) se não estiver será instalado
 
+# Desktop
 ENEM_ESCOLA_2019 <- read.csv2('bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
+
+# Github
+ENEM_ESCOLA_2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/etl_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
 
 # AED 
 status(ENEM_ESCOLA_2019) # explorar a qualidade das variáveis
