@@ -12,6 +12,9 @@ Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/i
 * Valores Ausentes, Outliers e Imputação
 * ETL de Textos com R
 * ETL de Datas com R
+* Aprendizagem Supervisionada
+* Aprendizagem Não Supervisionada
+* Rmarkdown
 
 ### Turmas atuais
 
