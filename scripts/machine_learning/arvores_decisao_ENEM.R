@@ -38,18 +38,19 @@ postResample(testeENEM[ , 4], predicaoCTree) # teste de performance da Árvore C
 
 ## novos dados
 novosDados <- data.frame(
-  ANO = as.integer(2019), 
-  ID = as.integer(9999999),
-  tipo = as.factor('Regular'),
-  media = 0, 
-  MED_CAT_0 = 0, 
-  MED_01_CAT_0 = 0, 
-  MED_02_CAT_0 =0, 
-  TDI_03 = 23, 
-  MED_MHA = 0, 
-  MED_01_MHA = 0, 
-  MED_02_MHA = 0, 
-  MHA_03 = 9)
+  ANO = as.integer(c(2019, 2019)), 
+  ID = as.integer(c(9999999, 9999999)),
+  tipo = as.factor(c('Regular', 'Federal')),
+  media = c(0,0), 
+  MED_CAT_0 = c(0,0), 
+  MED_01_CAT_0 = c(0,0), 
+  MED_02_CAT_0 =c(0,0), 
+  TDI_03 = c(23, 7), 
+  MED_MHA = c(0,0), 
+  MED_01_MHA = c(0,0), 
+  MED_02_MHA = c(0,0), 
+  MHA_03 = c(9, 8) 
+             )
 
 levels(novosDados$tipo) <- levels(testeENEM$tipo)
 
