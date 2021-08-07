@@ -22,7 +22,9 @@ testeENEM = ENEM_ESCOLA_2019[-particaoENEM$Resample1, ] # - treino = teste
 cTreeENEM <- party::ctree(media ~ tipo + TDI_03 + MHA_03, treinoENEM) # árvore de decisão com inferência condicional
 plot(cTreeENEM) # plot
 
-forestENEM = randomForest(treinoENEM[ , c(3, 8, 12)], treinoENEM[ , 4], ntree = 10, keep.forest=T, importance=T) # floresta aleatória
+forestENEM = randomForest(treinoENEM[ , c(3, 8, 12)], treinoENEM[ , 4], ntree = 100, keep.forest=T, keep.inbag = TRUE, importance=T) # floresta aleatória
+
+plot(forestENEM)
 
 permimp(forestENEM) # importância de cada variável
 varImp(forestENEM, scale = T) # importância de cada variável
@@ -34,3 +36,21 @@ predicaoCTree  = predict(cTreeENEM, testeENEM) # criar predição
 postResample(testeENEM[ , 4], predicaoForest) # teste de performance da Floresta Aleatória
 postResample(testeENEM[ , 4], predicaoCTree) # teste de performance da Árvore Condicional
 
+## novos dados
+novosDados <- data.frame(
+  ANO = as.integer(2019), 
+  ID = as.integer(9999999),
+  tipo = as.factor('Regular'),
+  media = 0, 
+  MED_CAT_0 = 0, 
+  MED_01_CAT_0 = 0, 
+  MED_02_CAT_0 =0, 
+  TDI_03 = 23, 
+  MED_MHA = 0, 
+  MED_01_MHA = 0, 
+  MED_02_MHA = 0, 
+  MHA_03 = 9)
+
+levels(novosDados$tipo) <- levels(testeENEM$tipo)
+
+predict(forestENEM, novosDados)
