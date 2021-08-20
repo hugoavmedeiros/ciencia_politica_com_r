@@ -4,7 +4,7 @@ pacman::p_load(caret, dplyr, forcats, funModeling)
 ENADE2019_PRODUCAO <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/cd_com_r/master/bases_tratadas/ENADE2019_PRODUCAO.csv')
 status(ENADE2019_PRODUCAO)
 
-# AED 
+# AED
 status(ENADE2019_PRODUCAO) # explorar a qualidade das variáveis
 
 ENADE2019_PRODUCAO[ , c(1,3,4,6:13)] <- lapply(ENADE2019_PRODUCAO[ , c(1,3,4,6:13)], as.factor)
@@ -16,9 +16,8 @@ particaoENADE = createDataPartition(1:nrow(ENADE2019_PRODUCAO), p=.7) # cria a p
 treinoENADE = ENADE2019_PRODUCAO[particaoENEM$Resample1, ] # treino
 testeENADE = ENADE2019_PRODUCAO[-particaoENEM$Resample1, ] # - treino = teste
 
-levels(treinoENADE$QE_I17) <- levels(testeENADE$QE_I17)
+ENADE2019_PRODUCAO_LM <- lm(NT_GER ~ CO_ORGACAD + NU_IDADE + CO_TURNO_GRADUACAO + QE_I08 + QE_I15, data = treinoENADE) 
 
-ENADE2019_PRODUCAO_LM <- lm(NT_GER ~ CO_ORGACAD + NU_IDADE + CO_TURNO_GRADUACAO + QE_I08 + QE_I15, data = treinoENADE)
 summary(ENADE2019_PRODUCAO_LM)
 
 plot(ENADE2019_PRODUCAO_LM$residuals, pch = 16, col = "red")
