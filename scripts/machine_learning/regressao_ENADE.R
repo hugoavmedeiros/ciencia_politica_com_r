@@ -1,7 +1,7 @@
 pacman::p_load(caret, dplyr, forcats, funModeling)
 
 # 
-ENADE2019_PRODUCAO <- read.csv2('bases_tratadas/ENADE2019_PRODUCAO.csv')
+ENADE2019_PRODUCAO <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/cd_com_r/master/bases_tratadas/ENADE2019_PRODUCAO.csv')
 status(ENADE2019_PRODUCAO)
 
 # AED 
