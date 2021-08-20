@@ -1,8 +1,8 @@
-# ETL com R
-## Extração, Transformação e Leitura com linguagem R 
+# Ciência de Dados com R
+## Programação; Extração, Transformação e Leitura; Machine Learning e Datavis com linguagem R 
 
 ### O que é?
-Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a> . 
+Materiais do curso de Ciência de Dados com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a>. 
 
 ### Temáticas abordadas
 * Introdução ao R
@@ -14,13 +14,14 @@ Materiais do curso de ETL com R do professor <a href="https://www.linkedin.com/i
 * ETL de Datas com R
 * Aprendizagem Supervisionada
 * Aprendizagem Não Supervisionada
+* Datavis
 * Rmarkdown
 
 ### Turmas atuais
 
-* 2021-02 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
+* 2021-02 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
 
 ### Turmas Anteriores
 * 2021-01 Tópicos Especiais de metodologia: Eletiva de análise de dados (ME/DO), no Programa de Pós-graduação em Ciência Política (PPGCP) da Universidade Federal de Pernambuco (UFPE)
-* 2020-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
-* 2019-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS(BA) da Faculdade Frassinetti do Recife (FAFIRE)
+* 2020-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
+* 2019-01 Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
