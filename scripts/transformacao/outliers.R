@@ -1,6 +1,4 @@
-library(dplyr)
-library(data.table)
-library(plotly)
+pacman::p_load(data.table, dplyr, plotly)
 
 # carregar dados covid19 Pernambuco
 covid19PE <- fread('https://dados.seplag.pe.gov.br/apps/basegeral.csv')

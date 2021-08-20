@@ -17,7 +17,7 @@ treinoENEM <- treinoENEM[ , -1]
 testeENEM <- testeENEM[ , -1]
 
 # Modelagem
-regrasENEM = arulesCBA::CBA(media ~ ., treinoENEM, supp=0.01, conf=0.01) 
+regrasENEM = arulesCBA::CBA(media ~ ., treinoENEM, supp=0.001, conf=0.001) 
 inspect(regrasENEM$rules)
 plot(regrasENEM$rules)
 
