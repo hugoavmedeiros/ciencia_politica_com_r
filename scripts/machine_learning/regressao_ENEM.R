@@ -1,5 +1,5 @@
 # carrega as bibliotecas
-pacman::p_load(caret, corrplot, dplyr, forcats, funModeling)
+pacman::p_load(car, caret, corrplot, dplyr, forcats, funModeling)
 
 # Github
 ENEM_ESCOLA_2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/etl_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
@@ -32,3 +32,5 @@ plot(cooks.distance(ENEM_LM), pch = 16, col = "blue")
 predicaoLM = predict(ENEM_LM, testeENEM)
 
 postResample(testeENEM[ , 4], predicaoLM)
+
+save(ENEM_LM, file = "modelos/ENEM_LM.RData")
