@@ -1,5 +1,4 @@
 ## ajuste em regressão
-
 pacman::p_load(car, caret, corrplot, data.table, dplyr, forcats, funModeling, mltools)
 
 ENEM_ESCOLA_2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/etl_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
@@ -9,7 +8,7 @@ ENEM_ESCOLA_2019$codCasos <- seq(1:nrow(ENEM_ESCOLA_2019))
 # Análise exploratória de casos
 ENEM_ESCOLA_2019_FEDERAL <- ENEM_ESCOLA_2019 %>% filter(tipo == 'Federal')
 
-p1 <-plot_ly(y = ENEM_ESCOLA_2019_FEDERAL$MED_CAT_0, type = "box", text = ENEM_ESCOLA_2019_FEDERAL$codCasos, boxpoints = "all", jitter = 0.3)
+p1 <- plot_ly(y = ENEM_ESCOLA_2019_FEDERAL$MED_CAT_0, type = "box", text = ENEM_ESCOLA_2019_FEDERAL$codCasos, boxpoints = "all", jitter = 0.3)
 
 p2 <-plot_ly(y = ENEM_ESCOLA_2019_FEDERAL$MED_MHA, type = "box", text = ENEM_ESCOLA_2019_FEDERAL$codCasos, boxpoints = "all", jitter = 0.3)
 

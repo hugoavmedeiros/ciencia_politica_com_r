@@ -29,6 +29,6 @@ irisDT$Sepal.Length[irisNASeed] <- NA # recolocamos os NA
 
 (irisDT$Sepal.Length <- impute(irisDT$Sepal.Length, "random")) # fazemos a imputação aleatória
 
-# imputação por instâncias
+# imputação por instâncias /semelhança
 irisDT$Sepal.Length[irisNASeed] <- NA # recolocamos os NA
 irisDT2 <- kNN(irisDT)
