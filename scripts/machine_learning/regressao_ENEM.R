@@ -1,5 +1,5 @@
 # carrega as bibliotecas
-pacman::p_load(car, caret, corrplot, dplyr, forcats, funModeling)
+pacman::p_load(car, caret, corrplot, data.table, dplyr, forcats, funModeling, mltools)
 
 # Github
 ENEM_ESCOLA_2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/etl_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
@@ -15,6 +15,7 @@ particaoENEM = createDataPartition(1:nrow(ENEM_ESCOLA_2019), p=.7) # cria a part
 treinoENEM = ENEM_ESCOLA_2019[particaoENEM$Resample1, ] # treino
 testeENEM = ENEM_ESCOLA_2019[-particaoENEM$Resample1, ] # - treino = teste
 
+# regressão
 ENEM_LM <- lm(media ~ tipo + MED_CAT_0 + MED_01_CAT_0 + MED_02_CAT_0 + TDI_03 + MED_MHA + MED_01_MHA + MED_02_MHA + MHA_03, data = treinoENEM)
 
 summary(ENEM_LM)
@@ -33,4 +34,4 @@ predicaoLM = predict(ENEM_LM, testeENEM)
 
 postResample(testeENEM[ , 4], predicaoLM)
 
-save(ENEM_LM, file = "modelos/ENEM_LM.RData")
+save(ENEM_LM, file = "modelos/ENEM_LM.RData") # salvar e exportar modelos
