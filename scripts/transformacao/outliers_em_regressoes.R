@@ -1,7 +1,7 @@
 ### outliers em regressões
 
 # carrega as bibliotecas
-pacman::p_load(car, caret, corrplot, dplyr, forcats, funModeling)
+pacman::p_load(car, caret, corrplot, dplyr, forcats, funModeling, Hmisc, plotly)
 
 load("modelos/ENEM_LM.RData") # carrega modelo pronto
 
@@ -24,4 +24,5 @@ influencePlot(ENEM_LM, id.method="identify", main="Observações Influentes")
 
 # base para identificação de outlier
 ENEM_ESCOLA_2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/etl_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv', stringsAsFactors = T) # carregando a base já tratada para o ambiente do R
+
 
