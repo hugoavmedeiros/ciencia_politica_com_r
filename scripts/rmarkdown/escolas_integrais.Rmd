@@ -1,28 +1,46 @@
 ---
-title: "Escolas Integrais"
+title: "Escolas Integrais em Pernambuco"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr)
+
+escolas_integrais <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.csv')
+
+escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola)
+
+escolas_integral_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
+
+escolas_integrais_agg <- merge(escolas_integral_agg, escolas_integrais, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
+
+escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% summarise(n = n()) %>% mutate(n_ant = lag(n))
+
+
+
 ```
 
-```{r pressure, echo=FALSE}
-pacman::p_load(dplyr, leaflet, leaflet.extras, leaflet.minicharts, rgdal, tidyr)
+## Evolução da Rede Integral
 
-escolas_integral <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.csv')
+### Série Histórica
 
-escolas_integral$nome_escola <- as.factor(escolas_integral$nome_escola)
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-escolas_integral_agg <- escolas_integral %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
+plot_ly(escolas_integrais_ano, x = ~ano_implantacao) %>% add_trace(y = ~n_ant, name = 'ano anterior', mode = 'lines+markers') %>% add_trace(y = ~n, name = 'ano', mode = 'lines+markers')
 
-escolas_integral_agg <- merge(escolas_integral_agg, escolas_integral, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
+```
 
-leaflet(escolas_integral_agg) %>% addTiles() %>%
+### Mapa Interativo
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+leaflet(escolas_integrais_agg) %>% addTiles() %>%
   addMinicharts(
-    escolas_integral_agg$lon, escolas_integral_agg$lat,
-    chartdata = escolas_integral_agg$n,
-    time = escolas_integral_agg$ano_implantacao.x,
+    escolas_integrais_agg$lon, escolas_integrais_agg$lat,
+    chartdata = escolas_integrais_agg$n,
+    time = escolas_integrais_agg$ano_implantacao.x,
     showLabels = F,
     width = 15, height = 15
   ) %>%
