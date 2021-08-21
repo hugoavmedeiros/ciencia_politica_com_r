@@ -6,19 +6,17 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr)
+pacman::p_load(dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr) # carregar os pacotes
 
-escolas_integrais <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.csv')
+escolas_integrais <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.csv') # carregar a base de dados
 
-escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola)
+escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola) # conversão de dados
 
 escolas_integral_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
 
 escolas_integrais_agg <- merge(escolas_integral_agg, escolas_integrais, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
 
-escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% summarise(n = n()) %>% mutate(n_ant = lag(n))
-
-
+escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% summarise(n = n()) %>% mutate(n_ant = lag(n, 10L))
 
 ```
 
@@ -26,15 +24,15 @@ escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% sum
 
 ### Série Histórica
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r sh, echo=FALSE, warning=FALSE, message=FALSE}
 
-plot_ly(escolas_integrais_ano, x = ~ano_implantacao) %>% add_trace(y = ~n_ant, name = 'ano anterior', mode = 'lines+markers') %>% add_trace(y = ~n, name = 'ano', mode = 'lines+markers')
+plot_ly(escolas_integrais_ano, x = ~ano_implantacao) %>% add_trace(y = ~n_ant, name = 'década anterior', mode = 'lines+markers') %>% add_trace(y = ~n, name = 'ano', mode = 'lines+markers')
 
 ```
 
 ### Mapa Interativo
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r mi, echo=FALSE, warning=FALSE, message=FALSE}
 
 leaflet(escolas_integrais_agg) %>% addTiles() %>%
   addMinicharts(

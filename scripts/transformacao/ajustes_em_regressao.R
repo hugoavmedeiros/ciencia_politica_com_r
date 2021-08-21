@@ -46,3 +46,7 @@ hat.plot(ENEM_LM_v2)
 
 # identificar observações influentes
 influencePlot(ENEM_LM_v2, id.method="identify", main="Observações Influentes")
+
+ENEM_ESCOLA_2019[10 , 5:12] <- NA
+
+
