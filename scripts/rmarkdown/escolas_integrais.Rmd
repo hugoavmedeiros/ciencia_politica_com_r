@@ -12,9 +12,9 @@ escolas_integrais <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.c
 
 escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola) # conversão de dados
 
-escolas_integral_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
+escolas_integrais_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
 
-escolas_integrais_agg <- merge(escolas_integral_agg, escolas_integrais, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
+escolas_integrais_agg <- merge(escolas_integrais_agg, escolas_integrais, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
 
 escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% summarise(n = n()) %>% mutate(n_ant = lag(n, 10L))
 
@@ -43,5 +43,15 @@ leaflet(escolas_integrais_agg) %>% addTiles() %>%
     width = 15, height = 15
   ) %>%
   addFullscreenControl()
+
+```
+
+### Modelo de Regressão
+
+```{r mr, echo=F, warning=F, message=F}
+
+load("../../modelos/ENEM_LM.RData")
+
+summary(ENEM_LM)
 
 ```
