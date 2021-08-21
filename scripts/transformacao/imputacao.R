@@ -1,4 +1,5 @@
-library(data.table)
+# imputação de valores em outliers ou missing
+pacman::p_load(data.table, Hmisc, VIM) # carrega pacotes
 
 ## imputação numérica
 # preparação da base, colocando NA aleatórios
@@ -9,7 +10,6 @@ irisDT <- iris %>% setDT() #copiar base iris, usando a data.table
 (irisDT$Sepal.Length[irisNASeed] <- NA) # imputamos NA nos valores aleatórios
 
 # tendência central
-library(Hmisc) # biblio que facilita imputação de tendência central
 irisDT$Sepal.Length <- impute(irisDT$Sepal.Length, fun = mean) # média
 irisDT$Sepal.Length <- impute(irisDT$Sepal.Length, fun = median) # mediana
 
@@ -31,6 +31,4 @@ irisDT$Sepal.Length[irisNASeed] <- NA # recolocamos os NA
 
 # imputação por instâncias
 irisDT$Sepal.Length[irisNASeed] <- NA # recolocamos os NA
-
-library(VIM)
 irisDT2 <- kNN(irisDT)
