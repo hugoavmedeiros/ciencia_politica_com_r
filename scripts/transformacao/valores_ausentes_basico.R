@@ -1,6 +1,4 @@
-library(data.table)
-library(funModeling) 
-library(tidyverse) 
+pacman::p_load(data.table, funModeling, tidyverse) 
 
 idade <- c(floor(runif(70, 0, 80)), NA, NA)
 mean(idade)

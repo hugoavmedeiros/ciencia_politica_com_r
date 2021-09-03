@@ -1,5 +1,3 @@
-# install.packages('pacman') # melhor pacote para trabalhar com pacotes!
-
 # pacotes
 pacman::p_load(ade4, car, caret, chunked, data.table, data.tree, dplyr, ff, ffbase, foreign, funModeling, ggparty, ggplot2, ggtree, gplots, LaF, Metrics, party, partykit, permimp,plm, randomForest, rattle, readr, REEMtree, sqldf) # usando o p_load do pacman vc garante que 1) se o pacote estiver instalado, será carregado 2) se não estiver será instalado
 
