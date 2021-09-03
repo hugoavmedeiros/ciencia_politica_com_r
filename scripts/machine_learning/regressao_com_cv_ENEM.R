@@ -37,7 +37,7 @@ varImpPlot(ENEM_RF, type=2) # importância de cada variável
 
 # Boosting
 # Treinamento
-ENEM_ADA <- train(nota ~ tipo + TDI_03 + MHA_03, data = ENEM_ESCOLA_2019, method = "glmboost")
+ENEM_ADA <- train(nota ~ tipo + TDI_03 + MHA_03, data = ENEM_ESCOLA_2019, method = "glmboost", trControl = train.control)
 
 # evolução do modelo
 plot(ENEM_ADA)
