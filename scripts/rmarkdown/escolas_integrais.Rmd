@@ -46,12 +46,3 @@ leaflet(escolas_integrais_agg) %>% addTiles() %>%
 
 ```
 
-### Modelo de Regressão
-
-```{r mr, echo=F, warning=F, message=F}
-
-load("../../modelos/ENEM_LM.RData")
-
-summary(ENEM_LM)
-
-```
