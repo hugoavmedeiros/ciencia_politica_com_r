@@ -1,5 +1,5 @@
 # carregar as bibliotecas
-pacman::p_load(cluster, factoextra, ggplot2, NbClust4)
+pacman::p_load(cluster, dplyr, factoextra, ggplot2)
 
 # pré-processamento
 iris_cluster <- iris[ , -5]
@@ -39,3 +39,5 @@ ggplot() +
 
 ## comparação
 iris_cluster$Species <- iris$Species
+
+iris_cluster %>% count(Species, cluster, sort = TRUE)
