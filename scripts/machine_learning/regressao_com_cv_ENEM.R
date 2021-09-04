@@ -27,7 +27,7 @@ ENEM_LM <- train(nota ~ tipo + TDI_03 + MHA_03, data = ENEM_ESCOLA_2019, method 
 print(ENEM_LM)
 summary(ENEM_LM)
 
-# Bagging
+# Bagging para Regressão
 ENEM_RF = randomForest(treinoENEM[ , c(3, 8, 12)], treinoENEM[ , 4], ntree = 100, keep.forest=T, keep.inbag = TRUE, importance=T) # floresta aleatória
 
 plot(ENEM_RF)
@@ -45,3 +45,11 @@ plot(ENEM_ADA)
 # Sumários
 print(ENEM_ADA)
 summary(ENEM_ADA)
+
+# Bagging para Classificação
+IRIS_RF = randomForest(iris[ , 1:4], iris[ , 5], ntree = 100, keep.forest=T, keep.inbag = TRUE, importance=T) # floresta aleatória
+
+plot(IRIS_RF)
+
+varImp(IRIS_RF, scale = T) # importância de cada variável
+varImpPlot(IRIS_RF, type=2) # importância de cada variável
