@@ -1,5 +1,5 @@
 ---
-title: "análise iris"
+title: "facebook"
 output: html_document
 ---
 
@@ -20,8 +20,8 @@ iris_cluster$cluster <- as.factor(cls$cluster) # passamos os clusters para a bas
 head(iris_cluster)
 ```
 
-# Agrupamento dos dados 'Iris'
-## K-means
+# Análise dos dados do facebook
+## AED
 
 Abaixo, você encontra o agrupamento da base de dados Iris, usando a técnica de k-means.
 
@@ -42,3 +42,13 @@ ggplot() +
 ```
 
 Observe que existe um cluster (nro 1) bastante separados dos outros. Alguns pontos desses dois clusters (nro 2 e nro 3) são semelhantes, dificultando a aprendizagem da máquina
+
+## Modelo Preditivo (RF)
+
+## K-means
+
+## Prescrição
+
+### Post com mais interações positivas
+
+### Post com mais interações negativas    
