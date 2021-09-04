@@ -20,6 +20,7 @@ testeENEM = ENEM_ESCOLA_2019[-particaoENEM$Resample1, ] # - treino = teste
 # Validação Cruzada: Pré-processamento
 # Controle de treinamento
 # train.control <- trainControl(method = "boot", number = 100)
+
 train.control <- trainControl(method = "cv", number = 10) # controle de treino
 # Treinamento
 ENEM_LM <- train(nota ~ tipo + TDI_03 + MHA_03, data = ENEM_ESCOLA_2019, method = "lm", trControl = train.control)
