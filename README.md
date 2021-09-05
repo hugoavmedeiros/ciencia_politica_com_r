@@ -27,14 +27,14 @@ Materiais do curso de Ciência de Dados com R do professor <a href="https://www.
 * 2019-01 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
 
 ### Sites Úteis
-* Sites Úteis
-https://www.r-bloggers.com/
-https://blog.rstudio.com/
-https://www.linkedin.com/company/r-icymi/posts/?feedView=all
-https://rweekly.org/2021-W03.html#get-
-https://www.statmethods.net/
-http://www.sthda.com/english/
-https://style.tidyverse.org/
+Sites Úteis
+* https://www.r-bloggers.com/
+* https://blog.rstudio.com/
+* https://www.linkedin.com/company/r-icymi/posts/?feedView=all
+* https://rweekly.org/2021-W03.html#get-
+* https://www.statmethods.net/
+* http://www.sthda.com/english/
+* https://style.tidyverse.org/
 
-* Cheat Sheets do RStudio
-https://www.rstudio.com/resources/cheatsheets/
+Cheat Sheets do RStudio
+* https://www.rstudio.com/resources/cheatsheets/
