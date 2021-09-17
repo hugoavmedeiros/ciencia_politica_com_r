@@ -1,0 +1,822 @@
+---
+title: "Agrupamento Municípios PE"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    social: menu
+    source: embed
+---
+
+```{r setup, include=FALSE}
+#pacotes
+pacman::p_load(conclust, corrplot, cluster, dplyr, factoextra, flexdashboard, funModeling, ggplot2, ggrepel, htmltools, leaflet, leaflet.extras, leaflet.minicharts, plotly, scclust)
+
+set.seed(1)
+
+# funções
+padroniza <- function(x) {
+  x <- (x - min(x)) / (max(x) - min(x))
+  return(x)
+}
+
+# ETL
+mun_pe <- read.csv2('../../bases_tratadas/clusters_municipios_pe.csv')
+mun_pe$rd <- as.factor(mun_pe$rd)
+mun_pe$municipio <- as.factor(mun_pe$municipio)
+```
+
+### Indicadores - como os indicadores se comportam? Há pontos extremos 
+
+```{r}
+plot_num(mun_pe[ , 4:6])
+```
+
+***
+
+- Para agrupamento dos municípios do estado, foram selecionados três indicadores - População (pop), Produto Interno Bruto (pib) e Valor Adicionado Bruto de Serviços (vab). Eles apresentam distribuição de <i> cauda longa </i> voltada para à esquerda. Isso ocorre quando há na amostra algum dos municípios com padrão diferente dos outros. Como pode ser observado no agrupamento em que está o município de <b> Recife </b>. 
+
+- Em virtude da dinâmica das Regiões de Desenvolvimento (RD), é possível que isso também ocorra nos agrupamentos, uma vez que cada RD tende a possuir uma cidade polo, a qual concentra pop, pib e vab. 
+
+### Correlações - Existem padrões de variação conjunta entre eles?
+
+```{r}
+corrplot(cor(mun_pe[, 3:6]))
+```
+
+***
+
+- Observamos que os indicadores População (pop), Produto Interno Bruto (pib) e Valor Adicionado Bruto de Serviços (vab) estão <b> correlacionados </b>, pois apresentam o mesmo comportamento de variação: quando <b> um </b> varia positivamente, o <b> outro </b> também varia positivamente e de forma proporcional. Isso é indicado pela cor azul do gráfico e o tamanho do círculo (próximo de 1). 
+
+- Por isso, para agrupamento (clusters) é melhor usar apenas uma das variáveis correlacionadas. Caso todas sejam usadas, poderemos confundir o algoritmo de divisão e agrupamento. 
+
+### Agreste Central
+
+```{r AC, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[1])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r AC1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'CARUARU')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'CARUARU')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 8, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 4, "G2" = 4))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 3
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- mun_pe_clusterA
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Caruaru </b> precisa ser isolado num grupo próprio, em virtude de seu pib ser mais que o dobro do pib dos grupos `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Também é importante julgar se, para o negócio, é melhor modificar, por exemplo, o grupo de <b> Riacho das Almas </b> e de <b> São Caitano </b>
+
+### Agreste Meridional
+
+```{r AM, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[2])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r AM1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'GARANHUNS')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'GARANHUNS')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 6, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 3, "G2" = 3))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 3
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Garanhuns </b> precisa ser isolado num grupo próprio, em virtude de seu pib ser igual ao pib dos grupos `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Também é importante julgar se, para o negócio, é melhor modificar, por exemplo, o grupo de <b> Jurema </b>
+
+### Agreste Setentrional
+
+```{r AS, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[3])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r AS1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 6, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 3, "G2" = 3))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` <br> `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))`
+
+### Mata Norte
+
+```{r MN, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[4])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r MN1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'GOIANA')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'GOIANA')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 6, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 3, "G2" = 3))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 3
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Goiana </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Também é importante julgar se, para o negócio, é melhor modificar, por exemplo, o grupo de <b> Lagoa de Itaenga </b>
+
+### Mata Sul
+
+```{r MS, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[5])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r MS1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'VITÓRIA DE SANTO ANTÃO')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'VITÓRIA DE SANTO ANTÃO')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 6, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 3, "G2" = 3))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 3
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Vitória de Santo Antão </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Também é importante julgar se, para o negócio, é melhor modificar, por exemplo, o grupo de <b> Xexéu </b>
+
+### Metropolitana
+
+```{r METRO, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[6])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r METRO1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'RECIFE')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'RECIFE')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 4, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 2, "G2" = 2))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 2
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Recife </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Para a RD Metropolitana, ocorre o ajuste mais difícil entre total de municípios no grupo e distância. Neste caso, foi priorizada a uniformidade do pib. 
+
+### Sertão Central
+
+```{r SC, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[7])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SC1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'SALGUEIRO')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'SALGUEIRO')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 4, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 2, "G2" = 2))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 1
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Salgueiro </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Por causa do número pequeno de municípios e do pib elevado de Salgueiro, só foram formados dois grupos. 
+
+### Sertão de Itaparica
+
+```{r SI, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[8])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SI1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'PETROLÂNDIA')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'PETROLÂNDIA')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 4, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 2, "G2" = 2))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 1
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Petrolândia </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+- Por causa do número pequeno de municípios e do pib elevado de Petrolândia, só foram formados dois grupos. 
+
+### Sertão do Araripe
+
+```{r SA, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[9])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SA1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'ARARIPINA')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'ARARIPINA')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 4, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 2, "G2" = 2))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 2
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Araripina </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))` 
+
+### Sertão do Moxotó
+
+```{r SM, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[10])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SM1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'ARCOVERDE')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'ARCOVERDE')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 3, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 1, "G2" = 1))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 2
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Arcoverde </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))`
+
+### Sertão do Pajeú
+
+```{r SP, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[11])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SP1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'SERRA TALHADA')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'SERRA TALHADA')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 6, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 3, "G2" = 3))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 2
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Serra Talhada </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))`
+
+### Sertão do São Francisco
+
+```{r SF, echo=FALSE, warning=FALSE, message=FALSE}
+# ETL
+mun_pe_cluster <- mun_pe
+rownames(mun_pe_cluster) <- mun_pe[ , 2]
+
+mun_pe_cluster [, 10:13] <- as.data.frame(
+  sapply(mun_pe_cluster [, 3:6], padroniza, simplify=F)
+)
+
+rdfiltro <- as.character(levels(mun_pe_cluster$rd)[12])
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro)
+```
+
+```{r SF1, echo=FALSE, warning=FALSE, message=FALSE}
+# remoção do outlier
+
+mun_pe_clusterA1 <- mun_pe_cluster %>% filter(municipio == 'PETROLINA')
+
+mun_pe_clusterA <- mun_pe_cluster %>% filter(rd == rdfiltro & municipio != 'PETROLINA')
+
+mun_pe_clusterA$etiqueta <- ifelse(mun_pe_clusterA$pib.1 > median(mun_pe_clusterA$pib.1), 'G1', 'G2')
+
+my_dist <- distances(mun_pe_clusterA,
+                     id_variable = "municipio",
+                     dist_variables = c("dist.1"))
+
+my_clustering <- sc_clustering(my_dist, size_constraint = 3, type_labels = mun_pe_clusterA$etiqueta, type_constraints = c("G1" = 1, "G2" = 1))
+
+mun_pe_clusterA$cluster <- my_clustering
+
+mun_pe_clusterA1$etiqueta <- 'G0'
+mun_pe_clusterA1$cluster <- 2
+
+mun_pe_clusterA <- rbind(mun_pe_clusterA, mun_pe_clusterA1)
+
+mun_pe_clusterA$cluster <- as.factor(mun_pe_clusterA$cluster)
+
+pal <- colorFactor(c("navy", "red", 'green', 'orange'), domain = c("0", "1", '2', '3'))
+
+leaflet(mun_pe_clusterA) %>% addTiles() %>%
+  addCircleMarkers(
+    color = ~pal(cluster),
+    stroke = FALSE, fillOpacity = 0.5, popup = ~htmlEscape(paste(municipio, 'R$', format(pib, big.mark=".")))
+  ) %>%
+  addLegend("bottomright", pal = pal, values = ~cluster,
+            title = "Grupos",
+            opacity = 1
+  ) %>%
+  addFullscreenControl()
+
+mun_pe_cluster_completo <- rbind(mun_pe_cluster_completo, mun_pe_clusterA)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% count())` 
+
+- Porém, <b> Petrolina </b> precisa ser isolado num grupo próprio, em virtude de seu pib, conforme se observa abaixo `r knitr::kable(mun_pe_clusterA %>% group_by(cluster) %>% summarise(pib = format(sum(pib), big.mark ='.')))`
+
+### Agrupamento Geral
+
+```{r AG, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::kable(mun_pe_cluster_completo)
+
+```
+
+***
+
+- O agrupamento ao lado reduz as distâncias entre os municípios de cada grupo, equilibra o pib dos diferentes grupos e mantém um número semelhante de municípios em cada cluster `r knitr::kable(mun_pe_cluster_completo)` 
