@@ -11,7 +11,7 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, plotly, shiny, zoo) # carregar pacotes
+pacman::p_load(caret, corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, plotly, shiny, zoo) # carregar pacotes
 
 source('municipios_processamento.R')
 
@@ -29,7 +29,7 @@ Controles {.sidebar}
 
 radioButtons(inputId = 'radioA1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
 
-checkboxGroupInput(inputId = 'radioA2', 'Selecione os Indicadores', names(mun_pe)[-c(1:3,7:9,15)], selected = c('pib', 'pop'))
+checkboxGroupInput(inputId = 'radioA2', 'Selecione os Indicadores', names(mun_pe)[-c(1:3,7:9,15)], selected = c('pib', 'pop', 'vab', 'icms', 'ipi', 'ipva', 'salario_medio', 'pop_ocu_per'))
 ```
 
 Row
@@ -145,7 +145,58 @@ renderPlotly({
 })
 ```
 
+Predição {data-icon="fa-diagnoses" data-orientation=rows}
+=====================================
+
+Controles {.sidebar}
+-------------------------------------
+
+```{r controle3, echo=FALSE, warning=FALSE, message=FALSE}
+numericInput('numC1', 'PIB', min(mun_pe$pib), step = 100000)
+
+numericInput('numC2', 'Salário Médio', min(mun_pe$salario_medio), step = 0.1)
+```
+
+What-if?
+
+O que acontece com a popução ocupada se o pib ou salário médio de um município forem modificados?
+
+Row
+-------------------------------------
+
+### Impacto dos Indicadores
+
+```{r pred1, echo=FALSE, warning=FALSE, message=FALSE}
+train.control <- trainControl(method = "cv", number = 10)
+
+mun_LM <- train(pop_ocu_per ~ pib + salario_medio, data = mun_pe, method = "lm", trControl = train.control)
+
+summary(mun_LM)
+```
+
+### Predição da População Ocupada
+
+```{r pred2, echo=FALSE, warning=FALSE, message=FALSE}
+
+renderPrint({
+
+predict(mun_LM, data.frame(pib = input$numC1, salario_medio = input$numC2))
+  
+})
+```
+
 Metadados {data-icon="fa-info" data-orientation=rows}
 =====================================
+
+Row
+-------------------------------------
+
+### Qualidade dos dados
+
+```{r quali, echo=FALSE, warning=FALSE, message=FALSE}
+
+knitr::kable(status(mun_pe))
+
+```
 
 Veja abaixo a tabela com as informações detalhadas dos indicadores <br> `r knitr::kable(mun_pe_meta) # inline` 
