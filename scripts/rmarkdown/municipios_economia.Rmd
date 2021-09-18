@@ -19,10 +19,13 @@ source('municipios_processamento.R')
 
 ```
 
+Análise de Indicadores {data-icon="fa-chart-line" data-orientation=rows}
+===================================== 
+
 Inputs {.sidebar}
 -----------------------------------------------------------------------
 
-```{r controle, echo=FALSE, warning=FALSE, message=FALSE}
+```{r controle1, echo=FALSE, warning=FALSE, message=FALSE}
 
 shiny::radioButtons(inputId = 'radio1', 'RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = T)
 ```
@@ -37,7 +40,7 @@ renderPlot({
   
   if(input$radio1 == "PERNAMBUCO") {
   
-    plot_num(mun_pe[ , c(4:6, 10:12) ] )
+    plot_num(mun_pe[ , c(4:6, 10:14) ] )
     
     }
   
@@ -45,7 +48,7 @@ renderPlot({
     
     m <- mun_pe %>% filter(rd == input$radio1)
     
-    plot_num(m[ , c(4:6, 10:12) ] )
+    plot_num(m[ , c(4:6, 10:14) ] )
     
   }
   
@@ -62,7 +65,7 @@ renderPlot({
   
   if(input$radio1 == "PERNAMBUCO") {
   
-    corrplot(cor(mun_pe[, c(4:6, 10:12)]))
+    corrplot(cor(mun_pe[, c(4:6, 10:14)]))
     
     }
   
@@ -70,9 +73,70 @@ renderPlot({
     
     m <- mun_pe %>% filter(rd == input$radio1)
     
-    corrplot(cor(m[, c(4:6, 10:12)]))
+    corrplot(cor(m[, c(4:6, 10:14)]))
     
   }
   
 })
 ```
+
+Agrupamento {data-icon="fa-object-group" data-orientation=rows}
+===================================== 
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r controle2, echo=FALSE, warning=FALSE, message=FALSE}
+
+shiny::radioButtons(inputId = 'radio2', 'RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = T)
+
+shiny::radioButtons(inputId = 'radio3', 'RD', 1:12, inline = T)
+```
+
+Row
+-------------------------------------
+
+### Agrupamento 
+
+```{r cluster, echo=FALSE, warning=FALSE, message=FALSE}
+renderPlot({
+  
+  if(input$radio2 == "PERNAMBUCO") {
+  
+    cls <- kmeans(x = mun_pe [, c(4:6, 10:14)], centers = 12)
+    
+    mun_pe$cluster <- as.factor(cls$cluster)
+    
+  ggplot() +
+  geom_point(data = mun_pe, 
+             mapping = aes(x = vab, 
+                           y = salario_medio, 
+                           colour = cluster)) +
+  theme_light()
+    
+    }
+  
+  else {
+    
+    m <- mun_pe %>% filter(rd == input$radio2)
+    
+    cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radio3)
+    
+    m$cluster <- as.factor(cls$cluster)
+    
+  ggplot() +
+  geom_point(data = m, 
+             mapping = aes(x = vab, 
+                           y = salario_medio, 
+                           colour = cluster)) +
+  theme_light()
+    
+  }
+  
+})
+```
+
+Metadados {data-icon="fa-info" data-orientation=rows}
+=====================================
+
+- Porém, <b> Caruaru </b> precisa ser isolado num grupo próprio, em virtude de seu pib ser mais que o dobro do pib dos grupos `r knitr::kable(mun_pe_meta)` 
