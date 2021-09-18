@@ -11,7 +11,7 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, shiny, zoo)
+pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, shiny, zoo) # carregar pacotes
 
 source('municipios_processamento.R')
 
@@ -22,12 +22,12 @@ source('municipios_processamento.R')
 Análise de Indicadores {data-icon="fa-chart-line" data-orientation=rows}
 ===================================== 
 
-Inputs {.sidebar}
------------------------------------------------------------------------
+Controles {.sidebar}
+-------------------------------------
 
 ```{r controle1, echo=FALSE, warning=FALSE, message=FALSE}
 
-shiny::radioButtons(inputId = 'radio1', 'RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = T)
+radioButtons(inputId = 'radio1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
 ```
 
 Row
@@ -40,13 +40,13 @@ renderPlot({
   
   if(input$radio1 == "PERNAMBUCO") {
   
-    plot_num(mun_pe[ , c(4:6, 10:14) ] )
+    plot_num(mun_pe [ , c(4:6, 10:14) ] )
     
     }
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio1)
+    m <- mun_pe %>% filter(rd == input$radio1) ## dinâmica
     
     plot_num(m[ , c(4:6, 10:14) ] )
     
@@ -71,7 +71,7 @@ renderPlot({
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio1)
+    m <- mun_pe %>% filter(rd == input$radio1) ## dinâmica
     
     corrplot(cor(m[, c(4:6, 10:14)]))
     
@@ -88,9 +88,9 @@ Inputs {.sidebar}
 
 ```{r controle2, echo=FALSE, warning=FALSE, message=FALSE}
 
-shiny::radioButtons(inputId = 'radio2', 'RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = T)
+shiny::radioButtons(inputId = 'radio2', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
 
-shiny::radioButtons(inputId = 'radio3', 'RD', 1:12, inline = T)
+shiny::radioButtons(inputId = 'radio3', 'Escolha o Total de Grupos', 1:12, inline = T)
 ```
 
 Row
@@ -118,9 +118,9 @@ renderPlot({
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio2)
+    m <- mun_pe %>% filter(rd == input$radio2) ## dinâmica
     
-    cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radio3)
+    cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radio3) ## dinâmica
     
     m$cluster <- as.factor(cls$cluster)
     
@@ -139,4 +139,4 @@ renderPlot({
 Metadados {data-icon="fa-info" data-orientation=rows}
 =====================================
 
-`r knitr::kable(mun_pe_meta)` 
+Veja abaixo a tabela com as informações detalhadas dos indicadores <br> `r knitr::kable(mun_pe_meta) # inline` 
