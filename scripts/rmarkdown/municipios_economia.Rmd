@@ -1,0 +1,78 @@
+---
+title: "Municípios de Pernambuco"
+output:
+   flexdashboard::flex_dashboard:
+    orientation: rows
+    # vertical_layout: scroll
+    theme: lumen
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, shiny, zoo)
+
+source('municipios_processamento.R')
+
+# mun_pe <- read.csv2('../../bases_tratadas/clusters_municipios_pe.csv')
+
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r controle, echo=FALSE, warning=FALSE, message=FALSE}
+
+shiny::radioButtons(inputId = 'radio1', 'RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = T)
+```
+
+Row
+-------------------------------------
+
+### Distribuição dos indicadores
+
+```{r hist, echo=FALSE, warning=FALSE, message=FALSE}
+renderPlot({
+  
+  if(input$radio1 == "PERNAMBUCO") {
+  
+    plot_num(mun_pe[ , c(4:6, 10:12) ] )
+    
+    }
+  
+  else {
+    
+    m <- mun_pe %>% filter(rd == input$radio1)
+    
+    plot_num(m[ , c(4:6, 10:12) ] )
+    
+  }
+  
+})
+```
+
+Row
+-------------------------------------
+
+### Relacionamento entre os indicadores
+
+```{r cor, echo=FALSE, warning=FALSE, message=FALSE}
+renderPlot({
+  
+  if(input$radio1 == "PERNAMBUCO") {
+  
+    corrplot(cor(mun_pe[, c(4:6, 10:12)]))
+    
+    }
+  
+  else {
+    
+    m <- mun_pe %>% filter(rd == input$radio1)
+    
+    corrplot(cor(m[, c(4:6, 10:12)]))
+    
+  }
+  
+})
+```
