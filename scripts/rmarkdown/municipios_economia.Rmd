@@ -139,4 +139,4 @@ renderPlot({
 Metadados {data-icon="fa-info" data-orientation=rows}
 =====================================
 
-- Porém, <b> Caruaru </b> precisa ser isolado num grupo próprio, em virtude de seu pib ser mais que o dobro do pib dos grupos `r knitr::kable(mun_pe_meta)` 
+`r knitr::kable(mun_pe_meta)` 
