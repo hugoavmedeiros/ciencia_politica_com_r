@@ -11,7 +11,7 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, shiny, zoo) # carregar pacotes
+pacman::p_load(corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, plotly, shiny, zoo) # carregar pacotes
 
 source('municipios_processamento.R')
 
@@ -19,7 +19,7 @@ source('municipios_processamento.R')
 
 ```
 
-Análise de Indicadores {data-icon="fa-chart-line" data-orientation=rows}
+Painel de Indicadores {data-icon="fa-chart-line" data-orientation=rows}
 ===================================== 
 
 Controles {.sidebar}
@@ -27,7 +27,9 @@ Controles {.sidebar}
 
 ```{r controle1, echo=FALSE, warning=FALSE, message=FALSE}
 
-radioButtons(inputId = 'radio1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
+radioButtons(inputId = 'radioA1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
+
+checkboxGroupInput(inputId = 'radioA2', 'Selecione os Indicadores', names(mun_pe)[-c(1:3,7:9,15)], selected = c('pib', 'pop'))
 ```
 
 Row
@@ -38,42 +40,43 @@ Row
 ```{r hist, echo=FALSE, warning=FALSE, message=FALSE}
 renderPlot({
   
-  if(input$radio1 == "PERNAMBUCO") {
+  if(input$radioA1 == "PERNAMBUCO") {
   
-    plot_num(mun_pe [ , c(4:6, 10:14) ] )
+    m <- mun_pe %>% select(input$radioA2)
+    
+    plot_num(m)
     
     }
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio1) ## dinâmica
+    m <- mun_pe %>% filter(rd == input$radioA1) %>% select(input$radioA2) ## dinâmica
     
-    plot_num(m[ , c(4:6, 10:14) ] )
+    plot_num(m)
     
   }
   
 })
 ```
 
-Row
--------------------------------------
-
 ### Relacionamento entre os indicadores
 
 ```{r cor, echo=FALSE, warning=FALSE, message=FALSE}
 renderPlot({
   
-  if(input$radio1 == "PERNAMBUCO") {
+  if(input$radioA1 == "PERNAMBUCO") {
   
-    corrplot(cor(mun_pe[, c(4:6, 10:14)]))
+    m <- mun_pe %>% select(input$radioA2)
+    
+    corrplot(cor(m))
     
     }
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio1) ## dinâmica
+    m <- mun_pe %>% filter(rd == input$radioA1) %>% select(input$radioA2) ## dinâmica
     
-    corrplot(cor(m[, c(4:6, 10:14)]))
+    corrplot(cor(m))
     
   }
   
@@ -88,9 +91,13 @@ Inputs {.sidebar}
 
 ```{r controle2, echo=FALSE, warning=FALSE, message=FALSE}
 
-shiny::radioButtons(inputId = 'radio2', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
+radioButtons(inputId = 'radioB1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
 
-shiny::radioButtons(inputId = 'radio3', 'Escolha o Total de Grupos', 1:12, inline = T)
+radioButtons(inputId = 'radioB2', 'Escolha o Total de Grupos', 1:6, inline = T)
+
+radioButtons(inputId = 'radioX1', 'Selecione os Indicadores',  names(mun_pe)[-c(1:3,7:9,15)], inline = F)
+
+radioButtons(inputId = 'radioY1', 'Selecione os Indicadores', names(mun_pe)[-c(1:3,7:9,15)], inline = F)
 ```
 
 Row
@@ -99,36 +106,38 @@ Row
 ### Agrupamento 
 
 ```{r cluster, echo=FALSE, warning=FALSE, message=FALSE}
-renderPlot({
+renderPlotly({
   
-  if(input$radio2 == "PERNAMBUCO") {
+  if(input$radioB1 == "PERNAMBUCO") {
   
     cls <- kmeans(x = mun_pe [, c(4:6, 10:14)], centers = 12)
     
     mun_pe$cluster <- as.factor(cls$cluster)
     
-  ggplot() +
-  geom_point(data = mun_pe, 
-             mapping = aes(x = vab, 
-                           y = salario_medio, 
-                           colour = cluster)) +
-  theme_light()
+    x_axis <- input$radioX1
+    y_axis <- input$radioY1
     
+  ggplot(mun_pe, aes_string(x = x_axis, y = y_axis, color = "cluster")) +
+  geom_point(size = 4,
+             stroke = 3) +
+  theme_light()
+  
     }
   
   else {
     
-    m <- mun_pe %>% filter(rd == input$radio2) ## dinâmica
+    m <- mun_pe %>% filter(rd == input$radioB1) ## dinâmica
     
-    cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radio3) ## dinâmica
+    cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radioB2) ## dinâmica
     
     m$cluster <- as.factor(cls$cluster)
     
-  ggplot() +
-  geom_point(data = m, 
-             mapping = aes(x = vab, 
-                           y = salario_medio, 
-                           colour = cluster)) +
+    x_axis <- input$radioX1
+    y_axis <- input$radioY1
+    
+ ggplot(m, aes_string(x = x_axis, y = y_axis, color = 'cluster')) +
+  geom_point(size = 4,
+             stroke = 3) +
   theme_light()
     
   }
