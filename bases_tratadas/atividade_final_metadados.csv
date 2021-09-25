@@ -1,0 +1,7 @@
+atributo;informação
+STG (The degree of study time for goal object materails),;tempo de estudo na matéria principal
+SCG (The degree of repetition number of user for goal object materails);exercícios
+STR (The degree of study time of user for related objects with goal object);tempo de estudo em matérias correlatas
+LPR (The exam performance of user for related objects with goal object);performance em matérias correlatas
+PEG (The exam performance of user for goal objects);performance na matéria principal
+UNS (The knowledge level of user);nível de conhecimento
