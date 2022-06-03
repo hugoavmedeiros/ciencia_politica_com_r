@@ -18,10 +18,10 @@ Materiais do curso de Ciência de Dados com R do professor <a href="https://www.
 * Rmarkdown
 
 ### Turmas atuais
-
-* 2021-02 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
+* 2022-02 Tópicos de Metodologia, no Mestrado Profissional em Ciências Políticas (UFPE). 
 
 ### Turmas Anteriores
+* 2021-02 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
 * 2021-01 Tópicos Especiais de metodologia: Eletiva de análise de dados (ME/DO), no Programa de Pós-graduação em Ciência Política (PPGCP) da Universidade Federal de Pernambuco (UFPE)
 * 2020-01 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
 * 2019-01 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
