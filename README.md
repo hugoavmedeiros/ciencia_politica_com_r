@@ -19,6 +19,7 @@ Materiais do curso de Ciência de Dados com R do professor <a href="https://www.
 
 ### Turmas atuais
 * 2022-02 Tópicos de Metodologia, no Mestrado Profissional em Ciências Políticas (UFPE). 
+* 2022-02 Estudos Avançados de Metodologia de Pesquisa, no Programa de Pós-graduação em Ciência Política (UFPE)
 
 ### Turmas Anteriores
 * 2021-02 Machine Learning e Tópicos Avançados em BI e BA, na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
