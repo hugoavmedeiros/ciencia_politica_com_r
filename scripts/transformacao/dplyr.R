@@ -1,5 +1,7 @@
 library(dplyr)
 
+facebook <- read.table("https://raw.githubusercontent.com/hugoavmedeiros/cd_com_r/master/bases_originais/dataset_Facebook.csv", sep=";", header = T)
+
 # sumários
 count(facebook, Type) 
 
