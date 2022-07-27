@@ -1,11 +1,6 @@
-##### Pacotes
-
-install.packages("caret") # instalar pacote
+##### Análise ENEM
 
 library("caret") # carregar pacote 
-caret::featurePlot(x = iris[ , 1:4], y = iris$Species)
-
-##### Ler 
 
 ENEM2019 <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/cd_com_r/master/bases_tratadas/ENEM_ESCOLA_2019.csv')
 
