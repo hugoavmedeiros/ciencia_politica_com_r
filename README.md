@@ -1,8 +1,8 @@
-# Ciência de Dados com R
-## Programação; Extração, Transformação e Leitura; Machine Learning e Datavis com linguagem R 
+# Ciência Política e Gestão Pública com R
+## Programação; Extração, Transformação e Leitura; Machine Learning; Datavis; Produtos e Serviços de Dados com linguagem R voltado para a área de Ciência Política e Gestão Pública.
 
 ### O que é?
-Materiais do curso de Ciência de Dados com R do professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a>. 
+Materiais de diferentes cursos que usam a linguagem R para aplicar conhecimentos de Ciência de Dados às áreas de Ciência Política, Gestão Pública e também Negócios, ministrados pelo professor <a href="https://www.linkedin.com/in/hugoavmedeiros/" target="_blank"><b>Hugo Medeiros</b></a> em diferentes instituições. 
 
 ### Temáticas abordadas
 * Introdução ao R
