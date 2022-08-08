@@ -84,7 +84,7 @@ renderPlot({
 ```
 
 Agrupamento {data-icon="fa-object-group" data-orientation=rows}
-===================================== 
+=====================================
 
 Inputs {.sidebar}
 -----------------------------------------------------------------------
@@ -103,45 +103,45 @@ radioButtons(inputId = 'radioY1', 'Selecione os Indicadores', names(mun_pe)[-c(1
 Row
 -------------------------------------
 
-### Agrupamento 
+### Agrupamento
 
 ```{r cluster, echo=FALSE, warning=FALSE, message=FALSE}
 renderPlotly({
-  
+
   if(input$radioB1 == "PERNAMBUCO") {
-  
+
     cls <- kmeans(x = mun_pe [, c(4:6, 10:14)], centers = 12)
-    
+
     mun_pe$cluster <- as.factor(cls$cluster)
-    
+
     x_axis <- input$radioX1
     y_axis <- input$radioY1
-    
+
   ggplot(mun_pe, aes_string(x = x_axis, y = y_axis, color = "cluster")) +
   geom_point(size = 4,
              stroke = 3) +
   theme_light()
-  
+
     }
-  
+
   else {
-    
+
     m <- mun_pe %>% filter(rd == input$radioB1) ## dinâmica
-    
+
     cls <- kmeans(x = m [, c(4:6, 10:14)], centers = input$radioB2) ## dinâmica
-    
+
     m$cluster <- as.factor(cls$cluster)
-    
+
     x_axis <- input$radioX1
     y_axis <- input$radioY1
-    
+
  ggplot(m, aes_string(x = x_axis, y = y_axis, color = 'cluster')) +
   geom_point(size = 4,
              stroke = 3) +
   theme_light()
-    
+
   }
-  
+
 })
 ```
 
@@ -181,7 +181,7 @@ summary(mun_LM)
 renderPrint({
 
 predict(mun_LM, data.frame(pib = input$numC1, salario_medio = input$numC2))
-  
+
 })
 ```
 
@@ -199,4 +199,4 @@ knitr::kable(status(mun_pe))
 
 ```
 
-Veja abaixo a tabela com as informações detalhadas dos indicadores <br> `r knitr::kable(mun_pe_meta) # inline` 
+Veja abaixo a tabela com as informações detalhadas dos indicadores <br> `r knitr::kable(mun_pe_meta) # inline`
