@@ -1,7 +1,4 @@
-library(data.table)
-library(dplyr)
-library(tidyverse)
-library(validate)
+pacman::p_load(data.table, dplyr, tidyverse, validate)
 
 general_data <- fread("https://covid.ourworldindata.org/data/owid-covid-data.csv") # carrega dados de covid19 no mundo
 

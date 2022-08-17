@@ -1,5 +1,4 @@
-library(funModeling) 
-library(tidyverse) 
+pacman::p_load(funModeling, tidyverse) 
 
 glimpse(iris) # olhada nos dados
 status(iris) # estrutura dos dados (missing etc)
