@@ -3,6 +3,7 @@
 pacman::p_load(data.table, ggplot2)
 
 # AGORA, A BASE DE DADOS CAR EVALUATION #
+breast_cancer <- fread('https://raw.githubusercontent.com/hugoavmedeiros/cp_com_r/master/bases_tratadas/breast_cancer.csv', stringsAsFactors = T)
 breast_cancer <- fread('bases_tratadas/breast_cancer.csv', stringsAsFactors = T)
 
 # TABELA DE CONTINGÊNCIA #
