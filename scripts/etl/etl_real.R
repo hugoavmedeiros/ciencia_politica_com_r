@@ -12,7 +12,7 @@ colunas_iguais <- names(sinistrosRecife2020Raw[
   intersect(
     names(sinistrosRecife2020Raw), names(sinistrosRecife2021Raw))])
 
-sinistrosRecife2020Raw <- sinistrosRecife2020Raw %>% select(all_of(colunas_diferentes))
+sinistrosRecife2020Raw <- sinistrosRecife2020Raw %>% select(all_of(colunas_iguais))
 
 sinistrosRecifeRaw <- rbind(sinistrosRecife2020Raw, sinistrosRecife2021Raw)
 
