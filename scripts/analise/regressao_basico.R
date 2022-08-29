@@ -1,5 +1,5 @@
 ### CARREGANDO PACOTES ###
-pacman::p_load(car, gvlma, lm.beta, lmtest, sandwich)
+pacman::p_load(car, gvlma, lm.beta, lmtest, MASS, sandwich)
 
 ### REGRESSÃO FERTILIDADE - BASE SWISS
 regSwiss <- lm(Fertility ~ ., data = swiss) # ESTIMANDO A REGRESSÃO
@@ -38,3 +38,6 @@ plot(regSwiss, which=3, col=c("blue"))  # Scale-Location Plot
 regSwiss$robse <- vcovHC(regSwiss, type = "HC1")
 coeftest(regSwiss, regSwiss$robse)
 
+regRSwiss <- rlm(Fertility ~ ., data = swiss)
+summary(regRSwiss)
+summary(regSwiss)
