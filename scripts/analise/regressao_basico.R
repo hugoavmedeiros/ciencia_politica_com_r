@@ -16,7 +16,7 @@ summary(regSwissBoth)
 
 ### VERIFICAÇÃO DOS PRESSUPOSTOS ###
 # normalidade dos resíduos
-shapiro.test(residuals(exemplo_swiss))
+shapiro.test(residuals(regSwiss))
 plot(regSwiss, which=1, col=c("blue")) # resíduos x ajuste
 plot(regSwiss, which=2, col=c("red")) # Q-Q Plot
 plot(regSwiss, which=5, col=c("blue"))  # Observações Influentes
@@ -25,8 +25,8 @@ plot(regSwiss, which=5, col=c("blue"))  # Observações Influentes
 
 # inflação da variância
 vif(regSwiss)
-barplot(vif(regSwiss), main = "VIF Values", horiz = TRUE, xlim = c(0,10), col = "steelblue")
-abline(v = 5, lwd = 3, lty = 2)
+barplot(vif(regSwiss), main = "VIF Values", horiz = FALSE, col = "steelblue", ylim = c(0,5))
+abline(h = 5, lwd = 3, lty = 2)
 
 #= Correção seria usar apenas uma das variáveis correlacionadas =#
 
