@@ -23,7 +23,7 @@ plot(regSwiss, which=5, col=c("blue"))  # Observações Influentes
 
 #= Correção seria retirar as observações influentes =#
 
-# inflação da variância
+# inflação da variância / multico
 vif(regSwiss)
 barplot(vif(regSwiss), main = "VIF Values", horiz = FALSE, col = "steelblue", ylim = c(0,5))
 abline(h = 5, lwd = 3, lty = 2)
@@ -38,6 +38,6 @@ plot(regSwiss, which=3, col=c("blue"))  # Scale-Location Plot
 regSwiss$robse <- vcovHC(regSwiss, type = "HC1")
 coeftest(regSwiss, regSwiss$robse)
 
-regRSwiss <- rlm(Fertility ~ ., data = swiss)
+regRSwiss <- rlm(Fertility ~ . -Examination, data = swiss)
 summary(regRSwiss)
 summary(regSwiss)
