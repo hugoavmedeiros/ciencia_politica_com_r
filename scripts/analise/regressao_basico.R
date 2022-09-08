@@ -23,7 +23,7 @@ plot(regSwiss, which=5, col=c("blue"))  # Observações Influentes
 
 #= Correção seria retirar as observações influentes =#
 
-# inflação da variância / multico
+# inflação da variância / multicolinearidade
 vif(regSwiss)
 barplot(vif(regSwiss), main = "VIF Values", horiz = FALSE, col = "steelblue", ylim = c(0,5))
 abline(h = 5, lwd = 3, lty = 2)
