@@ -25,7 +25,7 @@ sinistrosRecifeRaw$data <- as.Date(sinistrosRecifeRaw$data, format = "%Y-%m-%d")
 # modifica natureza do sinistro de texto para fator
 sinistrosRecifeRaw$natureza_acidente <- as.factor(sinistrosRecifeRaw$natureza_acidente)
 
-# cria funçaõ para substituir not available (na) por 0
+# cria função para substituir not available (na) por 0
 naZero <- function(x) {
   x <- ifelse(is.na(x), 0, x)
 }

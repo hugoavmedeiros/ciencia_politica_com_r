@@ -24,13 +24,13 @@ testeENEM = ENEM_ESCOLA_2019[-particaoENEM, ] # - treino = teste
 
 # Validação Cruzada: Pré-processamento
 # Controle de treinamento
-
 train.control <- trainControl(method = "cv", number = 10, verboseIter = T) # controle de treino
 
 # Treinamentos
 ## Regressão Linear
 ENEM_LM <- train(nota ~ EREM + ETE + Federal + Privada + Regular + TDI_03 + MHA_03, data = treinoENEM, method = "lm", trControl = train.control)
 summary(ENEM_LM) # sumário do modelo linear
+plot(varImp(ENEM_LM))
 
 ## Árvore de Decisão
 ENEM_RPART <- train(nota ~ EREM + ETE + Federal + Privada + Regular + TDI_03 + MHA_03, data = treinoENEM, method = "rpart", trControl = train.control)
@@ -43,8 +43,7 @@ plot(varImp(ENEM_RPART)) # importância das variáveis
 ENEM_RF <- train(nota ~ EREM + ETE + Federal + Privada + Regular + TDI_03 + MHA_03, data = treinoENEM, method = "cforest", trControl = train.control)
 
 plot(ENEM_RF) # evolução do modelo
-varImp(ENEM_RF, scale = T) # importância de cada variável
-plot(varImp(ENEM_RF, scale = T)) # plot de importância
+plot(varImp(ENEM_RF)) # plot de importância
 
 # Boosting com Boosted Generalized Linear Model
 ENEM_ADA <- train(nota ~ EREM + ETE + Federal + Privada + Regular + TDI_03 + MHA_03, data = treinoENEM, method = "glmboost", trControl = train.control)
@@ -62,17 +61,3 @@ predVals <- extractPrediction(list(ENEM_RF), testX = testeENEM[, c(8, 12, 13:17)
 
 plotObsVsPred(predVals)
 
-# MAE = Mean absolute erro (Erro médio absoluto) - Média dos módulos dos resíduos
-# RMSE = Root Mean Squared Error (Raiz quadrada do erro-médio) - Média da raiz quadrada do quadrado do resíduo
-  # Semelhanças
-    # Mesma escala da variável de interesse
-    # Quanto menor melhor (orientadas negativamente)
-  # Diferenças
-    # RMSE capta melhor a variância dos erros
-    # MAE é mais simples de interpretar 
-
-plot(erros1 <- c(rep(2,10)))
-plot(erros2 <- c(rep(1,5), rep(3,5)))
-plot(erros3 <- c(rep(0,8), rep(10,2)))
-lista_erros <- matrix(c(sum(erros1)/10,sum(erros2)/10, sum(erros3)/10, sqrt(sum(erros1^2)/10), sqrt(sum(erros2^2)/10), sqrt(sum(erros3^2)/10)), ncol = 2, dimnames = list(c('Erros 1', 'Erros 2', 'Erros 3'), c('MAE', 'RMSE')))
-lista_erros

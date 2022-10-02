@@ -1,7 +1,4 @@
-library(dplyr)
-library(ggplot2)
-library(data.table)
-library(gridExtra)
+pacman::p_load(dplyr, ggplot2, data.table, gridExtra)
 
 # carregar dados covid19 Pernambuco
 covid19PE <- fread('https://dados.seplag.pe.gov.br/apps/basegeral.csv')
