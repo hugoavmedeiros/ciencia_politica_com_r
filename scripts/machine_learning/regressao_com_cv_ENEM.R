@@ -57,7 +57,6 @@ melhor_modelo
 
 summary(melhor_modelo)
 
-predVals <- extractPrediction(list(ENEM_RF), testX = testeENEM[, c(8, 12, 13:17)], testY = testeENEM$nota) 
+predVals <- extractPrediction(list(ENEM_RF), testX = testeENEM[, c(8, 12:17)], testY = testeENEM$nota) 
 
 plotObsVsPred(predVals)
-
