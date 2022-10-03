@@ -1,11 +1,11 @@
-# MAE = Mean absolute erro (Erro médio absoluto) - Média dos módulos dos resíduos
+# MAE = Mean absolute error (Erro médio absoluto) - Média dos módulos dos resíduos
 # RMSE = Root Mean Squared Error (Raiz quadrada do erro-médio) - Média da raiz quadrada do quadrado do resíduo
   # Semelhanças
     # Mesma escala da variável de interesse
     # Quanto menor melhor (orientadas negativamente)
   # Diferenças
     # RMSE capta melhor a variância dos erros
-    # MAE é mais simples de interpretar 
+    # MAE é mais simples de interpretar
 
 plot(erros1 <- c(rep(2,10)))
 plot(erros2 <- c(rep(1,5), rep(3,5)))

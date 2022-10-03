@@ -25,7 +25,7 @@ train.control <- trainControl(method = "cv", number = 10, verboseIter = T) # con
 # Treinamentos
 ## Máquina de Vetor se Suporte (SVM)
 ENEM_SVM_CLASS <- train(nota ~ EREM + ETE + Federal + Privada + Regular + TDI_03 + MHA_03, data = treinoENEM, method = "svmLinear", trControl = train.control)
-ENEM_SVM_CLASS # sumário da máquina de vetor se suporte
+ENEM_SVM_CLASS # sumário da máquina de vetor de suporte
 plot(varImp(ENEM_SVM_CLASS))
 
 # criar a máquina de vetor de suporte
