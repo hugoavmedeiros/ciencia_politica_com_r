@@ -1,11 +1,11 @@
 ---
-title: "análise iris"
+title: "Análise iris"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 # carregar as bibliotecas
-pacman::p_load(cluster, ggplot2)
+pacman::p_load(cluster, ggplot2, plotly)
 
 # pré-processamento
 iris_cluster <- iris[ , -5]
@@ -25,20 +25,13 @@ head(iris_cluster)
 
 Abaixo, você encontra o agrupamento da base de dados Iris, usando a técnica de k-means.
 
-```{r iris}
-ggplot() +
-  geom_point(data = iris_cluster, 
-             mapping = aes(x = Sepal.Length, 
-                           y = Petal.Length, 
-                           colour = cluster)) +
-  geom_point(mapping = aes_string(x = cls$centers[ , "Sepal.Length"], 
-                                  y = cls$centers[ , "Petal.Length"]),
-             color = "red", size = 4) +
-  geom_text(mapping = aes_string(x = cls$centers[ , "Sepal.Length"], 
-                                 y = cls$centers[ , "Petal.Length"],
-                                 label = 1:3),
-            color = "white", size = 2) +
+```{r iriscluster, echo=FALSE, warning=FALSE, message=FALSE}
+grafico1 <- ggplot() +
+  geom_point(data = iris_cluster, mapping = aes(x = Sepal.Length, y = Petal.Length, colour = cluster)) + 
+  geom_point(mapping = aes_string(x = cls$centers[ , "Sepal.Length"], y = cls$centers[ , "Petal.Length"]), color = "red", size = 4) +
+  geom_text(mapping = aes_string(x = cls$centers[ , "Sepal.Length"], y = cls$centers[ , "Petal.Length"], label = 1:3), color = "white", size = 2) +
   theme_light()
+ggplotly(grafico1)
 ```
 
 Observe que existe um cluster (nro 1) bastante separados dos outros. Alguns pontos desses dois clusters (nro 2 e nro 3) são semelhantes, dificultando a aprendizagem da máquina
