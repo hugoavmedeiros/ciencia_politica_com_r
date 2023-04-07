@@ -10,10 +10,13 @@ cmENEM_RF_CLASS$table
 
   # Expected Accuracy (AccE) = Acuidade Esperada = estimativa de acuidade "esperada", ou seja, uma acuidade mínima que poderia ser conseguida simplesmente "chutando" a classe de forma aleatória. 
 
-gtBaixa <- 67+19
-gtAlta <- 22+65
-pdBaixa <- 67+22
-pdAlta <- 19+65
+gtBaixa <- cmENEM_RF_CLASS$table[1]+cmENEM_RF_CLASS$table[2]
+gtAlta <- cmENEM_RF_CLASS$table[3]+cmENEM_RF_CLASS$table[4]
+
+pdBaixa <- cmENEM_RF_CLASS$table[1]+cmENEM_RF_CLASS$table[3]
+pdAlta <- cmENEM_RF_CLASS$table[2]+cmENEM_RF_CLASS$table[4]
+
 gtTotal <- gtAlta + gtBaixa
+
 estAcc <- (gtBaixa*pdBaixa/gtTotal^2)+(gtAlta*pdAlta/gtTotal^2)
 estAcc

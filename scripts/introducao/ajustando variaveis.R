@@ -12,7 +12,7 @@ listaPlots <- NULL
 
 for(i in nomeVar) {
   plot <- covid19PEMun %>% ggplot(aes_string(x = 'municipio', y=i)) + geom_bar(stat = "identity") + labs(x = "Município")
-  listaPlots[[length(listaPlots) + 1]] <-plot
+  listaPlots[[length(listaPlots) + 1]] <- plot
 } # criar lista com os plots
 
 # printar todos os plots, lado a lado

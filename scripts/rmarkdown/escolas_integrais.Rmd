@@ -6,13 +6,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr) # carregar os pacotes
+pacman::p_load(data.table, dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr) # carregar os pacotes
 
-escolas_integrais <- read.csv2('../../bases_tratadas/escolas_tempo_integral_v2.csv') # carregar a base de dados
+escolas_integrais <- fread('https://raw.githubusercontent.com/hugoavmedeiros/cp_com_r/master/bases_tratadas/escolas_tempo_integral_v2.csv') # carregar a base de dados
 
 escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola) # conversão de dados
 
-escolas_integrais_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
+escolas_integrais_agg <- escolas_integrais %>% group_by(nome_escola, ano_implantacao, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() 
+# %>% complete(ano_implantacao, nome_escola, fill = list(n = 0)) %>% filter(nome_escola != '') %>% distinct()
 
 escolas_integrais_agg <- merge(escolas_integrais_agg, escolas_integrais, by = 'nome_escola') %>% select(!ano_implantacao.y) %>% distinct()
 
