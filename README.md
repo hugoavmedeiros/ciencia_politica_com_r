@@ -1,4 +1,4 @@
-# Ciência Política e Gestão Pública com R
+# R para Ciência Política
 ## Programação; Extração, Transformação e Leitura; Machine Learning; Datavis; Produtos e Serviços de Dados com linguagem R voltado para a área de Ciência Política e Gestão Pública.
 
 ### O que é?
@@ -18,9 +18,10 @@ Materiais de diferentes cursos que usam a linguagem R para aplicar conhecimentos
 * Rmarkdown
 
 ### Turmas atuais
-* 2022-02 Estudos Avançados de Metodologia de Pesquisa (Doutorado), no Programa de Pós-graduação em Ciência Política (UFPE)
+* 2023-01 Análise de Dados (Mestrado), no Programa de Pós-graduação em Ciência Política (UFPE)
 
 ### Turmas Anteriores
+* 2022-02 Estudos Avançados de Metodologia de Pesquisa (Doutorado), no Programa de Pós-graduação em Ciência Política (UFPE)
 * 2022-02 Tópicos Especiais de Metodologia (Mestrado), no Mestrado Profissional em Políticas Públicas (UFPE). 
 * 2021-02 Machine Learning e Tópicos Avançados em BI e BA (Especialização), na Pós-graduação em BUSINESS INTELLIGENCE (BI) E BUSINESS ANALYTICS (BA) da Faculdade Frassinetti do Recife (FAFIRE)
 * 2021-01 Tópicos Especiais de Metodologia: Eletiva de análise de dados (Mestrado / Doutorado), no Programa de Pós-graduação em Ciência Política (PPGCP) da Universidade Federal de Pernambuco (UFPE)
