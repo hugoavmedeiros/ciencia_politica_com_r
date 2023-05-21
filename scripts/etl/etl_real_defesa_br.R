@@ -12,14 +12,15 @@ str(defesaBrasil)
 
 ## Problemas identificados
 ## Na coluna "GRUPO DE DESPESA" há linha com TOTAIS que pode trazer erros para a análise
+## Na Coluna "UNIDADE ORCAMENTARIA" há linhas com o TOTAL DO ÓRGÃO, as quais podem distorcar a análise
 ## A coluna dotação atual traz um dado que não dialoga com as outras colunas
 ## A base está orientada em wide, com os anos como colunas
 
 # para fazer as transformações de forma correta, vamos pegar os nomes das variáveis com a função names
 names(defesaBrasil)
 
-# Primeira transformação: retirar a coluna dotação e a linha TOTAL
-defesaBrasil <- defesaBrasil %>% select(-27) %>% filter(`GRUPO DE DESPESA` != 'TOTAL')
+# Primeira transformação: retirar a coluna dotação e as linhas de  TOTAL nas colunas "GRUPO DE DESPESA" e "UNIDADE ORCAMENTARIA"
+defesaBrasil <- defesaBrasil %>% select(-27) %>% filter(`GRUPO DE DESPESA` != 'TOTAL' & `UNIDADE ORCAMENTARIA` != 'MINISTERIO DA DEFESA - TOTAL DO ORGAO')
 
 # Segunda transformação: mudar de largo para longo
 defesaBrasilLong <- defesaBrasil %>% 

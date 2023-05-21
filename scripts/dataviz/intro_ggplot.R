@@ -1,13 +1,11 @@
 ## Carregar pacotes que serão usados
 pacman::p_load(dplyr, ggplot2)
 
-defesaBrasilLong <- readRDS('bases_tratadas/orcamento_defesa_brasil.rds')
-
 # Gráfico de Caixas Univariado
 
 iris %>% ggplot(aes(y = Sepal.Length)) + geom_boxplot()
 
-# Gráfico de Caixas Univariado
+# Gráfico de Caixas Multivariado
 
 iris %>% ggplot(aes(y = Sepal.Length, x = Species)) + geom_boxplot()
 
@@ -19,11 +17,15 @@ iris %>% ggplot(aes(x = Sepal.Length)) + geom_histogram()
 
 iris %>% ggplot(aes(x = Sepal.Length)) + geom_density()
 
-# Barras
-iris %>% ggplot(aes(y = Species, x = Sepal.Length)) + geom_bar(stat = "identity")
+## Leitura base orçamento defesa brasil
+
+defesaBrasilLong <- readRDS('bases_tratadas/orcamento_defesa_brasil.rds')
 
 # Séries Temporais
-defesaBrasilLong %>% ggplot(aes(x = Ano, y = Valor)) + geom_line()
+defesaBrasilLong %>% group_by(Ano) %>% summarise(Valor = sum(Valor)) %>% ggplot(aes(x = Ano, y = Valor)) + geom_line()
+
+# Barras
+defesaBrasilLong %>% ggplot(aes(x = Ano, y = Valor)) + geom_bar(stat = "identity")
 
 # Dispersão
 defesaBrasilLong %>% ggplot(aes(x = Ano, y = Valor)) + geom_point()
