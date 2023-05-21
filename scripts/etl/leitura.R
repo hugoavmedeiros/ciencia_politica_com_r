@@ -1,6 +1,6 @@
 ##########
 
-library(microbenchmark)
+pacman::p_load(microbenchmark)
 
 # exporta em formato nativo do R
 saveRDS(sinistrosRecifeRaw, "bases_tratadas/sinistrosRecife.rds")

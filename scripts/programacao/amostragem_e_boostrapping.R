@@ -1,3 +1,6 @@
+# distribuição normal simulada
+distNormalSimulacao <- rnorm(1000, mean = 3, sd = 1) # usa a função rnorm para criar uma distribuição normal, indicando o total de casos
+
 # amostragem sem reposição usando função sample
 sample(distNormalSimulacao, 15, replace = FALSE) # se você não tiver o objeto distNormalSimulacao no seu ambiente, crie com o script anterior
 
@@ -20,6 +23,12 @@ mean(mediaBootsNormal10) # media do boostraping 10
 mean(mediaBootsNormal50) # media do boostraping 50
 mean(mediaBootsNormal100) # media do boostraping 100
 mean(distNormalSimulacao) # media dos dados originais
+
+# vamos comparar???
+hist(mediaBootsNormal10) # media do boostraping 10
+hist(mediaBootsNormal50) # media do boostraping 50
+hist(mediaBootsNormal100) # media do boostraping 100
+hist(distNormalSimulacao) # media dos dados originais
 
 # partições
 install.packages('caret', dependencies = T) # caret é um pacote geral de machine learning # se já tiver não, innstale =D
