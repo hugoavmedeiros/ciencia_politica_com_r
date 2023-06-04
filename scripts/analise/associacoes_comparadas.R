@@ -57,3 +57,4 @@ corList4 <- multi.cor(k, l2)
 corList4 <- corList4[c(1,5,6,7, 15)]
 corList4
 plot(k, l2)
+
