@@ -1,17 +1,21 @@
+### CARREGAR PACOTES
 pacman::p_load(dplyr, ggplot2, plotly, readxl, tidyr)
 
+### CARREGAR BASES
 baseArtigo <- read_excel("bases_originais/base_artigo_v1.xlsx")
 
+### EXPLORAR BASE
 View(baseArtigo)
 str(baseArtigo)
 
 baseArtigo$casos <- as.factor(baseArtigo$casos)
 
+### ESTRUTURAR BASE
 baseArtigo2 <- baseArtigo %>% 
-  select(casos, Ano, v_positive_e_ios , v_negative_e_ios) %>% 
+  select(casos, Ano, v_positive_e_ios, v_negative_e_ios) %>% 
   pivot_longer(cols=c('v_positive_e_ios', 'v_negative_e_ios'), names_to='avaliacao', values_to="valor")
 
-## 
+### CRIAR GRÁFICO
 gCasos <- ggplot(
   data = baseArtigo2, # base utilizada
   mapping = aes(x = Ano, # eixo x
