@@ -3,7 +3,9 @@ pacman::p_load(car, gvlma, lm.beta, lmtest, MASS, sandwich)
 
 ### REGRESSÃO FERTILIDADE - BASE SWISS
 regSwiss <- lm(Fertility ~ ., data = swiss) # ESTIMANDO A REGRESSÃO
-summary(regSwiss) # SUMÁRIO DA REGRESSÃO
+summary(regSwiss) # SUMÁRIO
+regRSwiss <- rlm(Fertility ~ . -Examination, data = swiss)
+summary(regRSwiss) # SUMÁRIO
 lm.beta(regSwiss) # COEFICIENTES PADRONIZADOS
 
 # Stepwise #
@@ -37,7 +39,3 @@ plot(regSwiss, which=3, col=c("blue"))  # Scale-Location Plot
 #= Correção seria usar estimativas robustas =#
 regSwiss$robse <- vcovHC(regSwiss, type = "HC1")
 coeftest(regSwiss, regSwiss$robse)
-
-regRSwiss <- rlm(Fertility ~ . -Examination, data = swiss)
-summary(regRSwiss)
-summary(regSwiss)
