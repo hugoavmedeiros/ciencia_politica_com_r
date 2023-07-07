@@ -10,26 +10,25 @@ idepeOriginal <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/cie
 ExpData(data=idepeOriginal, type=2)
 # remover casos ausentes
 idepeOriginal <- idepeOriginal[complete.cases(idepeOriginal), ]
-idepeOriginal$qt_mat_bas_r <- sqrt(idepeOriginal$qt_mat_bas)
 
 # criar dummies
 idepeTratada <- idepeOriginal %>% filter(tp_escola != 'TECNICA')
 idepeTratada <- droplevels(idepeTratada)
 idepeTratada <- fastDummies::dummy_cols(idepeTratada)
-idepeTratada <- idepeTratada %>% dplyr::select(-c(tp_escola, tp_localizacao, p_em, nota_lp, nota_mt, nota_saep, qt_mat_bas, tdi_em, inse))
-colnames(idepeTratada)[11:15] <- c('Integral', 'Regular', "SemiIntegral", 'Rural', "Urbana")
+idepeTratada <- idepeTratada %>% dplyr::select(-c(tp_escola, tp_localizacao, p_em, nota_lp, nota_mt, idepe))
+colnames(idepeTratada)[13:17] <- c('Integral', 'Regular', "SemiIntegral", 'Rural', "Urbana")
 
 ##### MODELAGEM #####
 ### criação dos três modelo iniciais, usando step ###
-regIdepeBack <- step(lm(idepe ~ . -cod_escola, data = idepeTratada), direction = "backward")
-regIdepeForw <- step(lm(idepe ~ . -cod_escola, data = idepeTratada), direction = "forward")
-regIdepeBoth <- step(lm(idepe ~ . -cod_escola, data = idepeTratada), direction = "both")
+regIdepeBack <- step(lm(nota_saep ~ . -cod_escola, data = idepeTratada), direction = "backward")
+regIdepeForw <- step(lm(nota_saep ~ . -cod_escola, data = idepeTratada), direction = "forward")
+regIdepeBoth <- step(lm(nota_saep ~ . -cod_escola, data = idepeTratada), direction = "both")
 
 ### comparação dos modelos ###
-# sumários
-stargazer(regIdepeBack, regIdepeForw, regIdepeBoth, type="text", object.names = TRUE, title="Modelos ENEM", single.row=TRUE)
+# Sumários
+stargazer(regIdepeBack, regIdepeForw, regIdepeBoth, type="text", object.names = TRUE, title="Modelos IDEPE", single.row=TRUE)
 plot_summs(regIdepeBack, regIdepeForw, regIdepeBoth, model.names = c("Backward", "Forward", "Both"))
-# performance
+# Performance
 test_performance(regIdepeBack, regIdepeForw, regIdepeBoth)
 compare_performance(regIdepeBack, regIdepeForw, regIdepeBoth, rank = TRUE, verbose = FALSE)
 plot(compare_performance(regIdepeBack, regIdepeForw, regIdepeBoth, rank = TRUE, verbose = FALSE))
@@ -37,63 +36,82 @@ plot(compare_performance(regIdepeBack, regIdepeForw, regIdepeBoth, rank = TRUE, 
 ### Diagnóstico ###
 # checagem geral #
 check_model(regIdepeBoth)
-gvlma(regIdepeBoth)
 # testes unitários #
 shapiro.test(residuals(regIdepeBoth))
 check_heteroscedasticity(regIdepeBoth)
 check_collinearity(regIdepeBoth)
 # outliers #
 check_outliers(regIdepeBoth)
-avPlots(regIdepeBoth, ask=FALSE, onepage=TRUE, id.method="identify")
-influencePlot(regIdepeBoth, id.method="identify", main="Influence Plot", sub="Circle size is proportional to Cook’s distance")
+influencePlot(regIdepeBoth, id.method="identify", main="Observações Influentes", sub="Círculo proporcional à distância de Cook")
 residualPlots(regIdepeBoth)
-# predição
-rmse(idepeTratada$idepe, predict(regIdepeBoth))
-predicaoIdepe <- data.frame(predicao = predict(regIdepeBoth), reais = idepeTratada$idepe)
-ggplot(predicaoIdepe, aes(x = predicao, y = reais)) + geom_point() + geom_abline(intercept = 0, slope = 1, color = "red", size = 2)
 
-### Remodelagem ###
-summary(regIdepeBoth)
-regIdepeBoth2 <- lm(idepe ~ in_eja + tx_mat_bas_fem + tx_mat_bas_branca + mha_em + qt_mat_bas_r + Integral + Rural, data = idepeTratada)
+### Remodelagem 1 ###
+idepeTratada$qt_mat_bas_r <- sqrt(idepeTratada$qt_mat_bas)
+idepeTratada <- idepeTratada %>% dplyr::select(-c(qt_mat_bas, tdi_em))
+
+regIdepeBoth2 <- step(lm(nota_saep ~ . -cod_escola, data = idepeTratada), direction = "both")
 summary(regIdepeBoth2)
+
+par(ask = FALSE)
+check_model(regIdepeBoth2)
+residualPlots(regIdepeBoth2)
 
 ###### Correções #####
 ### Multicolinearidade ###
 # Seleção de variáveis por importância
+par(mfrow = c(1, 1))
 corrplot(cor(idepeTratada))
 varImp(regIdepeBoth2)
 
-### Heterocedasticidade ###
-# Estimativas robustas
-regIdepeBoth2$robse <- vcovHC(regIdepeBoth2, type = "HC1")
-coeftest(regIdepeBoth2, regIdepeBoth2$robse)
+### Remodelagem 2 ###
+regIdepeBoth3 <- step(lm(nota_saep ~ tx_mat_med_int + tx_mat_bas_fem + tx_mat_bas_branca + Integral + Rural + qt_mat_bas_r, data = idepeTratada), direction = "both")
+summary(regIdepeBoth3)
 
-### Ausência de normalidade ######
+par(ask = FALSE)
+check_model(regIdepeBoth3)
+residualPlots(regIdepeBoth3)
+
+### Ausência de normalidade nos resíduos ######
 # Remoção de outliers #
-cooksdIdepe <- cooks.distance(regIdepeBoth2)
+cooksdIdepe <- cooks.distance(regIdepeBoth3)
 obsInfluentes <- cooksdIdepe[cooksdIdepe > 4*mean(cooksdIdepe, na.rm=T)]
 
 idepeTratada %>% slice(c(as.integer(names(obsInfluentes))))
 
-idepeTratada3 <- idepeTratada %>% slice(-c(as.integer(names(obsInfluentes))))
+idepeTratada2 <- idepeTratada %>% slice(-c(as.integer(names(obsInfluentes))))
 
-regIdepeBoth3 <- step(lm(idepe ~ in_eja + tx_mat_bas_fem + tx_mat_bas_branca + mha_em + qt_mat_bas_r + Integral + Rural, data = idepeTratada3), direction = "both")
-summary(regIdepeBoth3)
-check_model(regIdepeBoth3)
+regIdepeBoth4 <- step(lm(nota_saep ~ tx_mat_med_int + tx_mat_bas_fem + tx_mat_bas_branca + Integral + Rural + qt_mat_bas_r, data = idepeTratada2), direction = "both")
+summary(regIdepeBoth4)
+check_model(regIdepeBoth4)
 
-# Transformação Box-Cox #
-idepeBoxCox <- EnvStats::boxcox(regIdepeBoth2, optimize = T)
+# Transformação Box-Cox#
+idepeBoxCox <- EnvStats::boxcox(regIdepeBoth3, optimize = T)
 
-par(mfrow=c(1,2))
-qqnorm(resid(regIdepeBoth2))
-qqline(resid(regIdepeBoth2))
+par(mfrow=c(1,2), ask = FALSE)
+qqnorm(resid(regIdepeBoth3))
+qqline(resid(regIdepeBoth3))
 plot(idepeBoxCox, plot.type = "Q-Q Plots", main = 'Normal Q-Q Plot')
-par(mfrow=c(1,1))
+par(mfrow=c(1,1), ask = FALSE)
 
-lambda <- regIdepeBoxCox$lambda
+lambda <- idepeBoxCox$lambda
+lambda
 
-regIdepeBoxCox2 <- lm(((idepe^lambda-1)/lambda) ~ in_eja + tx_mat_bas_fem + tx_mat_bas_branca + mha_em + qt_mat_bas_r + Integral + Rural, data = idepeTratada)
+regIdepeBoxCox <- step(lm((nota_saep^lambda-1)/lambda ~ tx_mat_med_int + tx_mat_bas_fem + tx_mat_bas_branca + Integral + Rural + qt_mat_bas_r, data = idepeTratada2), direction = "both")
+
+summary(regIdepeBoxCox)
+check_model(regIdepeBoxCox)
 
 # Bootstraping #
-regIdepeBoot <- Boot(regIdepeBoth2, R=199)
+regIdepeBoot <- Boot(regIdepeBoth3, R=199)
 summary(regIdepeBoot, high.moments=TRUE)
+
+############## EXTRAS #####################
+# predição
+rmse(idepeTratada$nota_saep, predict(regIdepeBoth))
+predicaoIdepe <- data.frame(predicao = predict(regIdepeBoth), reais = idepeTratada$idepe)
+ggplot(predicaoIdepe, aes(x = predicao, y = reais)) + geom_point() + geom_abline(intercept = 0, slope = 1, color = "red", size = 2)
+
+### Heterocedasticidade ###
+# Estimativas robustas
+regIdepeBoth2$robse <- vcovHC(regIdepeBoth3, type = "HC1")
+coeftest(regIdepeBoth3, regIdepeBoth3$robse)
