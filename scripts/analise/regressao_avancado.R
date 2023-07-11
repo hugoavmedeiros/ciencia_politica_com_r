@@ -98,8 +98,17 @@ lambda
 
 regIdepeBoxCox <- step(lm((nota_saep^lambda-1)/lambda ~ tx_mat_med_int + tx_mat_bas_fem + tx_mat_bas_branca + Integral + Rural + qt_mat_bas_r, data = idepeTratada2), direction = "both")
 
+regIdepeBoxCox2 <- step(lm((nota_saep^lambda)~ tx_mat_med_int + tx_mat_bas_fem + tx_mat_bas_branca + Integral + Rural + qt_mat_bas_r, data = idepeTratada2), direction = "both")
+
 summary(regIdepeBoxCox)
 check_model(regIdepeBoxCox)
+
+par(mfrow=c(2,2), ask = FALSE)
+plot(regIdepeBoth3, which=2, col=c("red"), main = 'Regressão original') 
+plot(regIdepeBoxCox, which=2, col=c("red"), main = 'Regressão Box Cox 1')
+plot(regIdepeBoxCox2, which=2, col=c("red"), main = 'Regressão Box Cox 2') 
+plot(idepeBoxCox, plot.type = "Q-Q Plots", main = 'Box Cox EnvStats')
+par(mfrow=c(1,1), ask = FALSE)
 
 # Bootstraping #
 regIdepeBoot <- Boot(regIdepeBoth3, R=199)
