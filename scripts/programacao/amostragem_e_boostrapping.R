@@ -25,10 +25,11 @@ mean(mediaBootsNormal100) # media do boostraping 100
 mean(distNormalSimulacao) # media dos dados originais
 
 # vamos comparar???
-hist(mediaBootsNormal10) # media do boostraping 10
-hist(mediaBootsNormal50) # media do boostraping 50
-hist(mediaBootsNormal100) # media do boostraping 100
-hist(distNormalSimulacao) # media dos dados originais
+par(mfrow=c(2,2), ask = FALSE)
+hist(mediaBootsNormal10, main = 'Bootstrap 10 Repetições', xlab = 'Média 10 Repetições') # media do boostraping 10
+hist(mediaBootsNormal50, col='blue', main = 'Bootstrap 50 Repetições', xlab = 'Média 50 Repetições') # media do boostraping 50
+hist(mediaBootsNormal100, col='red', main = 'Bootstrap 100 Repetições', xlab = 'Média 100 Repetições') # media do boostraping 100
+hist(distNormalSimulacao, col='black', main = 'Dados Originais', xlab = 'Média Original') # media dos dados originais
 
 # partições
 install.packages('caret', dependencies = T) # caret é um pacote geral de machine learning # se já tiver não, innstale =D
