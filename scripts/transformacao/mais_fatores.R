@@ -2,7 +2,11 @@ library(ade4)
 library(arules)
 library(forcats)
 
-facebook <- read.table("bases_originais/dataset_Facebook.csv", sep=";", header = T)
+facebook <- read.table(
+  "https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/bases_originais/dataset_Facebook.csv", 
+  sep=";", 
+  header = T)
+
 str(facebook)
 
 # conversão em fatores
