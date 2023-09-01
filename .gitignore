@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+documentos/
+tabelaBrasileirao.csv
+data_integrity.R

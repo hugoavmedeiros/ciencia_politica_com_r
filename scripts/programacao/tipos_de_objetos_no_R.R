@@ -68,3 +68,5 @@ listaAlunos <- data.frame(
   dataNascimento = nascimentoAluno, # Data de nascimento
   idade = idadeAluno # idade
 ) 
+
+# matrix1 <- matrix(vetor1, nrow = 2)

@@ -19,6 +19,7 @@ summary(regSwissBoth)
 ### VERIFICAÇÃO DOS PRESSUPOSTOS ###
 # normalidade dos resíduos
 shapiro.test(residuals(regSwiss))
+par(mfrow=c(1,3))
 plot(regSwiss, which=1, col=c("blue")) # resíduos x ajuste
 plot(regSwiss, which=2, col=c("red")) # Q-Q Plot
 plot(regSwiss, which=5, col=c("blue"))  # Observações Influentes
@@ -39,3 +40,7 @@ plot(regSwiss, which=3, col=c("blue"))  # Scale-Location Plot
 #= Correção seria usar estimativas robustas =#
 regSwiss$robse <- vcovHC(regSwiss, type = "HC1")
 coeftest(regSwiss, regSwiss$robse)
+
+# 
+regSwissRob <- rlm(Fertility ~ ., data = swiss)
+summary(regSwissBoth)

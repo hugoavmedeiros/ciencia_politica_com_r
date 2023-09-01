@@ -1,0 +1,2 @@
+download.file(url = "https://download.inep.gov.br/microdados/microdados_saeb_2021_educacao_infantil.zip", destfile = "bases_originais/microdados_saeb_2021_educacao_infantil.zip") # arquivo de destino (incluindo em qual pasta deve fazer o download)
+saeb_2021_csv <- unzip("bases_originais/microdados_saeb_2021_educacao_infantil.zip", exdir = "bases_originais")

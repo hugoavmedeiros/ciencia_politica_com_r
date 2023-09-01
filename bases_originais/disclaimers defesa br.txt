@@ -1,0 +1,11 @@
+Observacoes: 
+a) valores em milhoes de reais
+b) os valores de 2000 a 2023 referem-se a valores correntes empenhados (sem correcao monetaria).
+c) valores de 2023: ate o mes de abril de 2023.
+d) Excluido grupo de despesa 9 - reserva de contingencia
+e) Nao inclui Acoes 0Z00 - Reserva de Contingencia - Financeira e 0Z01 Reserva de Contingencia Fiscal - Primaria
+UNIDADES ORCAMENTARIAS VINCULADAS A ADMINISTRACAO DIRETA DO MINISTERIO DA DEFESA: 52101, 52901, 52902 e 52903.
+UNIDADES ORCAMENTARIAS VINCULADAS AO COMANDO DA MARINHA: 52131, 52133, 52232, 52233, 52931 e 52932.
+UNIDADES ORCAMENTARIAS VINCULADAS AO COMANDO DO EXERCITO: 52121, 52221, 52222 e 52921.
+UNIDADES ORCAMENTARIAS VINCULADAS AO COMANDO DA AERONAUTICA: 52111, 52211 e 52911.
+Fonte: SIAFI.

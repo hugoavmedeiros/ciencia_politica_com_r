@@ -32,8 +32,7 @@ hist(mediaBootsNormal100, col='red', main = 'Bootstrap 100 Repetições', xlab =
 hist(distNormalSimulacao, col='black', main = 'Dados Originais', xlab = 'Média Original') # media dos dados originais
 
 # partições
-install.packages('caret', dependencies = T) # caret é um pacote geral de machine learning # se já tiver não, innstale =D
-library(caret)
+pacman::p_load(caret)
 
 # primeiro, criamos as partições de dados
 particaoDistNormal <- createDataPartition(1:length(distNormalSimulacao), p=.7) # passamos o tamanho do vetor e o parâmetro de divisão

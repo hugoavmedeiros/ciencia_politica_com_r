@@ -1,6 +1,11 @@
-library(ade4)
-library(arules)
-library(forcats)
+pacman::p_load(
+  #ETL
+  janitor,
+  # DISCRETIZAÇÃO
+  ade4,
+  arules,
+  # FATORES
+  forcats)
 
 facebook <- read.table(
   "https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/bases_originais/dataset_Facebook.csv", 
@@ -14,7 +19,7 @@ str(facebook)
 for(i in 2:7) {
   facebook[,i] <- as.factor(facebook[,i]) } 
 
-str(facebook)
+facebook %>% str()
 
 # filtro por tipo de dado
 
@@ -23,14 +28,18 @@ facebookFactor <- facebook[ , factorsFacebook]
 str(facebookFactor)
 
 # One Hot Encoding
-facebookDummy <- acm.disjonctif(facebookFactor)
+facebookDummy <- facebookFactor %>% acm.disjonctif()
 
 # Discretização
 inteirosFacebook <- unlist(lapply(facebook, is.integer))  
 facebookInteiros <- facebook[, inteirosFacebook]
-str(facebookInteiros)
+facebookInteiros %>% str()
 
 facebookInteiros$Page.total.likes.Disc <- discretize(facebookInteiros$Page.total.likes, method = "interval", breaks = 3, labels = c("poucos", 'médio', 'muitos'))
+
+facebookInteiros <- facebookInteiros %>% clean_names() # simplifica nomes usando janitor
+
+facebookInteiros %>% names()
 
 # forcats - usando tidyverse para fatores
 fct_count(facebookFactor$Type) # conta os fatores

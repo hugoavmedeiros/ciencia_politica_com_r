@@ -1,0 +1,38 @@
+---
+title: "Escolas Integrais em Pernambuco"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(data.table, dplyr, leaflet, leaflet.extras, leaflet.minicharts, plotly, rgdal, tidyr) # carregar os pacotes
+
+escolas_integrais <- fread('https://raw.githubusercontent.com/hugoavmedeiros/cp_com_r/master/bases_tratadas/escolas_tempo_integral_v2.csv') # carregar a base de dados
+
+escolas_integrais$nome_escola <- as.factor(escolas_integrais$nome_escola) # conversão de dados
+
+escolas_integrais_agg <- escolas_integrais %>% group_by(nome_escola, .drop=FALSE) %>% summarise(n = n()) %>% na.omit() 
+
+escolas_integrais_ano <- escolas_integrais %>% group_by(ano_implantacao) %>% summarise(n = n()) %>% mutate(n_ant = lag(n, 10L))
+
+```
+
+## Evolução da Rede Integral
+
+### Série Histórica
+
+```{r sh, echo=FALSE, warning=FALSE, message=FALSE}
+
+plot_ly(escolas_integrais_ano, x = ~ano_implantacao) %>% add_trace(y = ~n_ant, name = 'década anterior', mode = 'lines+markers') %>% add_trace(y = ~n, name = 'ano', mode = 'lines+markers')
+
+```
+
+### Mapa Interativo
+
+```{r mi, echo=FALSE, warning=FALSE, message=FALSE}
+
+leaflet(escolas_integrais) %>% addTiles() %>% addMarkers(~lon, ~lat, popup = ~as.character(nome_escola), label = ~as.character(nome_escola)) %>% addFullscreenControl()
+
+```
+
