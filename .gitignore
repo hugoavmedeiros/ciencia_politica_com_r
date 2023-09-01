@@ -1,7 +1,40 @@
+# R
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# Python
+*.pyc
+*~
+__pycache__
+python/scrap_instagram/__pycache__/
+python/scrap_instagram/env/
+python/scrap_instagram/unifafire/
+python/scrap_instagram/dados_instagram.csv
+python/scrap_instagram/instagram_unifafire_original.csv
+
+# Env
+.env
+myvenv/
+venv/
+
+# Windows
+Thumbs.db*
+ehthumbs*.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Visual Studio
+.vscode/
+.history/
+*.code-workspace
+
+# Extras
 documentos/
 tabelaBrasileirao.csv
 data_integrity.R
+unifafire/
+dados_instagram.csv
+instagram_unifafire_original.csv
+extras/
