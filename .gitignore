@@ -15,7 +15,10 @@ python/scrap_instagram/dados_instagram.xlsx
 python/scrap_instagram/instagram_unifafire_original.xlsx
 
 # html
-.html
+scripts/rmarkdown/escolas_integrais.html
+scripts/rmarkdown/escolas_integrais_novo.html
+scripts/rmarkdown/facebook.html
+scripts/rmarkdown/kmeans_iris.html
 
 # Env
 .env
