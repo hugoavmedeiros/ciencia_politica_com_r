@@ -11,8 +11,11 @@ __pycache__
 python/scrap_instagram/__pycache__/
 python/scrap_instagram/env/
 python/scrap_instagram/unifafire/
-python/scrap_instagram/dados_instagram.csv
-python/scrap_instagram/instagram_unifafire_original.csv
+python/scrap_instagram/dados_instagram.xlsx
+python/scrap_instagram/instagram_unifafire_original.xlsx
+
+# html
+.html
 
 # Env
 .env
