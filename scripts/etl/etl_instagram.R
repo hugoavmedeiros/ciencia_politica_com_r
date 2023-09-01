@@ -23,6 +23,10 @@ instagram_unifafire <- instagram_unifafire %>% mutate(
     Hora >= 0 ~ 'Madrugada'
   ))
 
+instagram_unifafire <- instagram_unifafire %>% mutate(
+  Curtidas = ifelse(Curtidas <0, 0, Curtidas)
+)
+
 # SALVAR #
 
 instagram_unifafire %>% select(-Tempo) %>% data.table::fwrite("bases_tratadas/instagram_unifafire.csv", sep = ";")

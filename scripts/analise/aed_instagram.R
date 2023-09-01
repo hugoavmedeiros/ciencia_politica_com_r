@@ -18,9 +18,7 @@ instagram_unifafire <- instagram_unifafire %>% mutate_at(
   c('mes', 'turno'), 
   as.factor)
 
-instagram_unifafire <- instagram_unifafire %>% mutate(
-  Curtidas = ifelse(Curtidas <0, 0, Curtidas)
-)
+instagram_unifafire$Data <- mdy(instagram_unifafire$Data)
 
 ### AED ###
 ## NUMÉRICA ##
@@ -56,9 +54,16 @@ dens_curtidas_turno <- instagram_unifafire %>% ggplot(aes(x=Curtidas, color=turn
 ggplotly(dens_curtidas_turno)
 
 # BARRAS
-barras_curtidas_mes <- instagram_unifafire %>% ggplot(aes(x=mes, y=Curtidas, fill=mes)) +  geom_col(na.rm=TRUE)
+barras_curtidas_mes <- instagram_unifafire %>% ggplot(aes(turno)) +  geom_bar(aes(weight = Curtidas, fill = turno))
 ggplotly(barras_curtidas_mes)
 
 # SÉRIE TEMPORAL
-instagram_unifafire$Data <- mdy(instagram_unifafire$Data)
-st_curtidas_data <- instagram_unifafire %>% ggplot(aes(x = data, y = Curtidas)) + geom_line(aes(color = turno))
+st_curtidas_data <- instagram_unifafire %>% ggplot(aes(x = Data, y = Curtidas)) + geom_line(aes(color = turno))
+ggplotly(st_curtidas_data)
+
+# DISPERSÃO
+sct_curtidas_comentarios <- instagram_unifafire %>% ggplot(aes(x=Curtidas, y=Comentários)) + geom_point() + geom_smooth()
+ggplotly(sct_curtidas_comentarios)
+
+bolha_curtidas_comentarios <- instagram_unifafire %>% ggplot(aes(x=Curtidas, y=Comentários)) + geom_point(aes(size=Visualizações)) + geom_smooth()
+ggplotly(bolha_curtidas_comentarios)
