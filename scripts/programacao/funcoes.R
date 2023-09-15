@@ -1,29 +1,12 @@
 # função
-f <- function() {
+hello_word <- function() {
   cat("Hello, world!\n")
   }
-f()
+hello_word()
 
-# função com estrutura de repetição
-f <- function(nro) {
-  for(i in 1:nro) {
-     cat("Hello, world!\n")
-    }
-  }
-f(3)
-
-# função com estrutura condicional e de repetição
-f <- function(nro) {
-  if(nro < 100) {
-  for(i in 1:nro) {
-    cat("Hello, world!\n")
-    }
-  } else {
-    cat("Tá de brincadeira imprimir isso tudo")
-  }
-}
-f(99)
-f(100)
+formals(hello_word)
+body(hello_word)
+environment(hello_word)
 
 # agora, uma função mais útil...
 centralizacao <- function(x) {
@@ -31,11 +14,30 @@ centralizacao <- function(x) {
   return(x)
 }
 
-centralizacao(irisCopia$Sepal.Length)
+iris$Sepal.Length |> centralizacao()
 
 centralizacao <- function(x) {
   x <- x - mean(x)
 }
 
-centralizacao(irisCopia$Sepal.Length)
-centroTeste <- centralizacao(irisCopia$Sepal.Length)
+iris$Sepal.Length |> centralizacao()
+centroTeste <- iris$Sepal.Length |> centralizacao()
+centroTeste
+
+### CARREGAR PACOTES
+pacman::p_load(ccaPP, lsa, minerva, Rfast)
+
+### CRIAR FUNÇÃO PARA RODAR VÁRIAS ASSOCIAÇÕES
+multi.ass <- function(x, y) {
+  corr = cor(x, y) # Correlação
+  cos = cosine(x, y) # Distância do Cosseno 
+  Associações = as.data.frame(list(corr, cos))
+  names(Associações) = c('Correlação', 'Cosseno')
+  return(Associações)
+}
+
+formals(multi.ass)
+body(multi.ass)
+environment(multi.ass)
+
+multi.ass(cars$speed, cars$dist)

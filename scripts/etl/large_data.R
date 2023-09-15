@@ -1,5 +1,4 @@
-library(ff)
-library(ffbase)
+pacman::p_load(ff)
 
 enderecoBase <- 'bases_originais/largeData.csv'
 

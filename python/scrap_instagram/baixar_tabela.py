@@ -5,7 +5,7 @@ from openpyxl import Workbook
 loader = instaloader.Instaloader()
 
 # Nome do usuário
-nome_do_usuario = 'unifafire'
+nome_do_usuario = 'seplag.pe'
 
 # Carregue um perfil público
 perfilFafire = instaloader.Profile.from_username(loader.context, nome_do_usuario)

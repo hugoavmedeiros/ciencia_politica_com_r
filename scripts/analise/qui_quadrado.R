@@ -7,11 +7,11 @@ breast_cancer <- fread('https://raw.githubusercontent.com/hugoavmedeiros/cp_com_
 breast_cancer <- fread('bases_tratadas/breast_cancer.csv', stringsAsFactors = T)
 
 # TABELA DE CONTINGÊNCIA #
-breast_cancer_table <- table(breast_cancer$breast, breast_cancer$tumor_tamanho)
+breast_cancer_table <- table(breast_cancer$idade, breast_cancer$tumor_tamanho)
 breast_cancer_table
 
 # GRÁFICOS DE DISPERSÃO PAREADOS DAS VARIÁVEIS #
-ggplot(breast_cancer) + aes(x = tumor_tamanho, fill = breast) + geom_bar(position = "fill")
+ggplot(breast_cancer) + aes(x = tumor_tamanho, fill = idade) + geom_bar(position = "fill")
 
 # TESTE QUI QUADRADO #
 breast_cancer_test <- chisq.test(breast_cancer_table)

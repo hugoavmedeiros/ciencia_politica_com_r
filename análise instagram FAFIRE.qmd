@@ -1,3 +1,15 @@
+---
+title: "Análise Instagram FAFIRE"
+format: html
+editor: visual
+---
+
+# Análise de Dados FAFIRE
+
+## Análise Gráfica
+
+```{r}
+#| echo: false
 #### PREPARAÇÃO ####
 ### PACOTES ###
 pacman::p_load(
@@ -112,3 +124,5 @@ bolha_curtidas_comentarios <- instagram_unifafire %>%
   geom_point(aes(size=Visualizações)) + # tamanho dos pontos
   geom_smooth() # cria a curva de associação
 ggplotly(bolha_curtidas_comentarios) # torna o gráfico dinâmico
+
+```

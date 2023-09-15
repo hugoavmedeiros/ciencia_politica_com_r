@@ -3,7 +3,7 @@
 pacman::p_load(corrplot, dplyr, ggplot2)
 
 # BASE DE DADOS IRIS SEM AS ESPÉCIES #
-iris2 <- iris %>% select(-Species)
+iris2 <- iris %>% select(Species)
 
 # TABELA DE CORRELAÇÃO COM TODAS AS VARIÁVEIS #
 cor(iris2)
@@ -12,6 +12,7 @@ cor(iris2)
 pairs(iris2)
 
 # CORRPLOT DAS VARIÁVEIS #
-irisCor <- cor(iris2)
+irisCor <- cor(iris2) # Tabela de correlações
 corrplot(irisCor, method = "number", order = 'alphabet')
 corrplot(irisCor, order = 'alphabet') 
+corrplot(irisCor, method = "square", order = 'AOE')
