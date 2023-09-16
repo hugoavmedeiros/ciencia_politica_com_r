@@ -11,18 +11,17 @@ ENEM_ESCOLA_2019 <- ENEM_ESCOLA_2019 %>% select(id, tipo, nota, TDI_03, MHA_03) 
 # Pré-processamento de variáveis
 ENEM_ESCOLA_2019[ , -c(1:2)] <- discretizeDF(ENEM_ESCOLA_2019[ , -c(1:2)]) # transforma variáveis numéricas em fatores
 
-associacaoENEM <- apriori(ENEM_ESCOLA_2019[ , -1], parameter = list(supp = 0.001, conf = 0.2, maxlen = 10))
+associacaoENEM <- apriori(ENEM_ESCOLA_2019[ , -1], parameter = list(supp = 0.2, conf = 0.5, maxlen = 10))
 
 summary(associacaoENEM)
 
 inspect(associacaoENEM)
 
 associacaoENEMPrin <- head(associacaoENEM, n = 25, by = "lift")
+
 plot(associacaoENEMPrin, method = "paracoord")
 
-plot(head(sort(associacaoENEMPrin, by = "lift"), 20),
-     method = "graph"
-)
+plot(head(sort(associacaoENEMPrin, by = "lift"), 20), method = "graph")
 
 # Pré-processamento de base
 particaoENEM = createDataPartition(1:nrow(ENEM_ESCOLA_2019), p=.7) # cria a partição 70-30
