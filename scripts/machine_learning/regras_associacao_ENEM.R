@@ -12,7 +12,9 @@ ENEM_ESCOLA_2019 <- ENEM_ESCOLA_2019 %>% select(id, tipo, nota, TDI_03, MHA_03) 
 ENEM_ESCOLA_2019[ , -c(1:2)] <- discretizeDF(ENEM_ESCOLA_2019[ , -c(1:2)]) # transforma variáveis numéricas em fatores
 
 associacaoENEM <- apriori(ENEM_ESCOLA_2019[ , -1], parameter = list(supp = 0.001, conf = 0.2, maxlen = 10))
+
 summary(associacaoENEM)
+
 inspect(associacaoENEM)
 
 associacaoENEMPrin <- head(associacaoENEM, n = 25, by = "lift")
