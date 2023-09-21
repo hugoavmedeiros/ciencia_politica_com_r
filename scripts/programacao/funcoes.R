@@ -4,9 +4,9 @@ hello_word <- function() {
   }
 hello_word()
 
-formals(hello_word)
-body(hello_word)
-environment(hello_word)
+hello_word |> formals()
+hello_word |> body()
+hello_word |> environment()
 
 # agora, uma função mais útil...
 centralizacao <- function(x) {
@@ -21,11 +21,12 @@ centralizacao <- function(x) {
 }
 
 iris$Sepal.Length |> centralizacao()
+
 centroTeste <- iris$Sepal.Length |> centralizacao()
 centroTeste
 
 ### CARREGAR PACOTES
-pacman::p_load(ccaPP, lsa, minerva, Rfast)
+pacman::p_load(lsa)
 
 ### CRIAR FUNÇÃO PARA RODAR VÁRIAS ASSOCIAÇÕES
 multi.ass <- function(x, y) {
@@ -36,8 +37,8 @@ multi.ass <- function(x, y) {
   return(Associações)
 }
 
-formals(multi.ass)
-body(multi.ass)
-environment(multi.ass)
+multi.ass |> formals()
+multi.ass |> body()
+multi.ass |> environment()
 
 multi.ass(cars$speed, cars$dist)
