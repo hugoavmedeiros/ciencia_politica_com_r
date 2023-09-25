@@ -5,7 +5,9 @@ pacman::p_load(
   # MACHINE LEARNING
   caret,
   # REGRAS DE ASSOCIAÇÃO
-  arules, arulesCBA, arulesViz
+  arules, arulesCBA, arulesViz,
+  # TABELAS
+  reactablefmtr
 )
 
 ##### ETL #####
@@ -43,6 +45,15 @@ regras_estaduais_res <- regras_estaduais[!is.redundant(regras_estaduais, measure
 # inspecionar regras
 inspect(regras_estaduais_res)
 
+regras_estaduais_df = data.frame(
+  lhs = labels(lhs(regras_estaduais_res)),
+  rhs = labels(rhs(regras_estaduais_res)), 
+  regras_estaduais_res@quality)
+
+reactable(regras_estaduais_df, defaultColDef = colDef(
+  cell = data_bars(regras_estaduais_df ,text_position = 'outside-base')
+))
+
 # gráfico de coordenadas
 plot(regras_estaduais_res, method="paracoord",control=list(reorder=T), measure=c("lift"), lty = "dotted")
 
@@ -56,6 +67,13 @@ regras_brancos<-apriori(estaduais_pe_2022, control=list(verbose=F), parameter = 
 quality(regras_brancos)<-round(quality(regras_brancos),digits = 3)
 regras_brancos<-sort(regras_brancos,by="lift")
 
-inspect(regras_brancos)
+regras_brancos_df = data.frame(
+  lhs = labels(lhs(regras_brancos)),
+  rhs = labels(rhs(regras_brancos)), 
+  regras_brancos@quality)
+
+reactable(regras_brancos_df, defaultColDef = colDef(
+  cell = data_bars(regras_brancos_df ,text_position = 'outside-base')
+))
 
 plot(regras_brancos,method="paracoord",control=list(reorder=T),measure=c("lift"),lty = "dotted")
