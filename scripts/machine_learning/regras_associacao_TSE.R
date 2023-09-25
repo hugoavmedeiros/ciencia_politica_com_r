@@ -11,7 +11,6 @@ pacman::p_load(
 )
 
 ##### ETL #####
-
 candidatos_pe_2022 <- fread('bases_originais/consulta_cand_2022_PE.csv', encoding = 'Latin-1', stringsAsFactors = T)
 
 # filtrar apenas deputados e variáveis de perfil
@@ -36,9 +35,9 @@ regras_estaduais <- apriori(
 
 ## limpar e organizar regras regras
 # três casas decimais
-quality(regras_estaduais)<-round(quality(regras_estaduais),digits = 3) 
+quality(regras_estaduais) <- round(quality(regras_estaduais), digits = 3) 
 # organizar por lift
-rules<-sort(regras_estaduais,by="lift") 
+regras_estaduais <- sort(regras_estaduais, by="lift") 
 # remover regras redundantes
 regras_estaduais_res <- regras_estaduais[!is.redundant(regras_estaduais, measure="lift")]
 
@@ -50,19 +49,18 @@ regras_estaduais_df = data.frame(
   rhs = labels(rhs(regras_estaduais_res)), 
   regras_estaduais_res@quality)
 
-reactable(regras_estaduais_df, defaultColDef = colDef(
-  cell = data_bars(regras_estaduais_df ,text_position = 'outside-base')
+reactable(regras_estaduais_df, defaultColDef = colDef(cell = data_bars(regras_estaduais_df ,text_position = 'outside-base')
 ))
 
 # gráfico de coordenadas
-plot(regras_estaduais_res, method="paracoord",control=list(reorder=T), measure=c("lift"), lty = "dotted")
+plot(regras_estaduais_res, method="paracoord", control=list(reorder=T), measure=c("lift"), lty = "dotted")
 
 # gráfico de relações agrupadas
 plot(regras_estaduais_res, method="grouped", measure=c("lift"))
 
 ### APENAS BRANCOS ###
 
-regras_brancos<-apriori(estaduais_pe_2022, control=list(verbose=F), parameter = list(minlen=2,supp=0.1,conf=0.3), appearance = list(lhs="raca=BRANCA",default="rhs"))
+regras_brancos <- apriori(estaduais_pe_2022, control=list(verbose=F), parameter = list(minlen=2, supp=0.1, conf=0.3), appearance = list(lhs="raca=BRANCA", default="rhs"))
 
 quality(regras_brancos)<-round(quality(regras_brancos),digits = 3)
 regras_brancos<-sort(regras_brancos,by="lift")
@@ -72,8 +70,7 @@ regras_brancos_df = data.frame(
   rhs = labels(rhs(regras_brancos)), 
   regras_brancos@quality)
 
-reactable(regras_brancos_df, defaultColDef = colDef(
-  cell = data_bars(regras_brancos_df ,text_position = 'outside-base')
+reactable(regras_brancos_df, defaultColDef = colDef( cell = data_bars(regras_brancos_df,text_position = 'outside-base')
 ))
 
 plot(regras_brancos,method="paracoord",control=list(reorder=T),measure=c("lift"),lty = "dotted")
