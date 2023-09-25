@@ -1,7 +1,7 @@
 ##### Regras de Associação 
 pacman::p_load(
   # ETL
-  dplyr,
+  data.table, dplyr,
   # MACHINE LEARNING
   caret,
   # REGRAS DE ASSOCIAÇÃO
