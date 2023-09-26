@@ -13,7 +13,7 @@ pacman::p_load(
 ##### ETL #####
 candidatos_pe_2022 <- fread('bases_originais/consulta_cand_2022_PE.csv', encoding = 'Latin-1', stringsAsFactors = T)
 
-# filtrar apenas deputados e variáveis de perfil
+# filtrar apenas deputados estaduais e variáveis de perfil
 estaduais_pe_2022 <- candidatos_pe_2022 %>% filter(DS_CARGO == 'DEPUTADO ESTADUAL') %>% select(TP_AGREMIACAO, NM_MUNICIPIO_NASCIMENTO, NR_IDADE_DATA_POSSE, DS_GENERO, DS_GRAU_INSTRUCAO, DS_ESTADO_CIVIL, DS_COR_RACA, DS_OCUPACAO)
 
 # observar se os dados estão com as classes certas
@@ -49,8 +49,11 @@ regras_estaduais_df = data.frame(
   rhs = labels(rhs(regras_estaduais_res)), 
   regras_estaduais_res@quality)
 
-reactable(regras_estaduais_df, defaultColDef = colDef(cell = data_bars(regras_estaduais_df ,text_position = 'outside-base')
-))
+reactable(
+  regras_estaduais_df, 
+  defaultColDef = colDef(cell = data_bars(regras_estaduais_df ,text_position = 'outside-base')),
+  pagination = F
+  )
 
 # gráfico de coordenadas
 plot(regras_estaduais_res, method="paracoord", control=list(reorder=T), measure=c("lift"), lty = "dotted")
