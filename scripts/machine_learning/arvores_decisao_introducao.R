@@ -1,6 +1,6 @@
 # pacotes
 pacman::p_load(
-  caret, rattle
+  caret, ggplot2, plotly, rattle
 )
 
 # Github
@@ -25,7 +25,9 @@ ENEM_RPART <- train(
   data = treinoENEM, 
   method = "rpart", 
   trControl = train.control,
-  tuneLength = 10)
+  tuneGrid = expand.grid(cp=c(0.00362, runif(19,0,0.25)))
+  # , tuneLength = 20
+  )
 
 plot(ENEM_RPART)
 
@@ -36,3 +38,13 @@ plot(varImp(ENEM_RPART)) # importância das variáveis
 predicaoTree = predict(ENEM_RPART, newdata = testeENEM)
 
 postResample(testeENEM[ , 7], predicaoTree) # teste de performance da Árvore Condicional
+
+base_avaliacao <- data.frame(
+  Observado = testeENEM[ , 7],
+  Predição = predicaoTree)
+
+predicao_arvore <- base_avaliacao %>% 
+  ggplot(aes(x=Observado, y=Predição)) + 
+  geom_point() + # cria os pontos
+  geom_smooth() # cria a curva de associação
+ggplotly(predicao_arvore)
