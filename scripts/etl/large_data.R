@@ -1,4 +1,5 @@
 ##### ARMAZENAMENTO EM DISCO #####
+#### FF ####
 # install_github("edwindj/ffbase", subdir="pkg")
 pacman::p_load(biglm, devtools, dplyr, ff, ffbase)
 
@@ -33,7 +34,27 @@ modelo <- biglm(a ~ b + c,  data = base_ff)
 
 summary(modelo)
 
-##### ARROW #####
+#### POLARS ####
+# install.packages("polars", repos = "https://rpolars.r-universe.dev")
+
+pacman::p_load(arrow, polars) 
+
+base_polars = pl$DataFrame(base_arrow)
+
+base_polars %>% head()
+
+base_polars %>% typeof()
+
+base_polars %>% class()
+
+base_polars %>% object.size() # não ha vantagem no tamanho
+
+base_polars_mod <- lm(a ~ b + c + d + e + f + g, base_polars)
+
+summary(base_polars_mod)
+
+##### COLUNAR #####
+#### ARROW ####
 pacman::p_load(arrow, dplyr)
 
 enderecoBase <- 'bases_originais/largeData.csv'
@@ -81,6 +102,7 @@ base_arrow_s1_mod <- lm(a ~ b + c + d + e + f + g, base_arrow_s1)
 
 summary(base_arrow_s1_mod)
 
+##### RDD #####
 #### SPARK ####
 # spark_install("3.5")
 
