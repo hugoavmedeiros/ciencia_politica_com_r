@@ -34,4 +34,4 @@ pacman::p_load(SparkR, sparklyr)
 
 sc <- spark_connect(master = "local")
 
-base_spark <- copy_to(sc, base_arrow)
+spark_web(sc)
