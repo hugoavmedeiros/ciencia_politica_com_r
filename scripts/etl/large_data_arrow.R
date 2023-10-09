@@ -46,3 +46,10 @@ base_arrow_s1 %>% object.size()
 base_arrow_s1_mod <- lm(a ~ b + c + d + e + f + g, base_arrow_s1)
 
 summary(base_arrow_s1_mod)
+
+######
+pisa2015_arrow <- read_csv_arrow("bases_originais/large data/pisa2015.csv")
+
+pisa2015_arrow %>% object.size()
+
+arrow::write_parquet(pisa2015_arrow, 'pisa2015_arrow.parquet')

@@ -2,7 +2,7 @@
 #### FF ####
 pacman::p_load(biglm, devtools, dplyr, ff, ffbase)
 
-enderecoBase <- 'bases_originais/largeData.csv'
+enderecoBase <- 'bases_originais/large data/largeData.csv'
 
 # criando o arquivo ff
 tempo_ff <- system.time(base_ff <- read.csv.ffdf(file=enderecoBase))

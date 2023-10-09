@@ -25,7 +25,7 @@ ENEM_RPART <- train(
   data = treinoENEM, 
   method = "rpart", 
   trControl = train.control,
-  tuneGrid = expand.grid(cp=c(0.00362, runif(19,0,0.25)))
+  tuneGrid = expand.grid(cp = c(0.00362, runif(19, 0, 0.25)))
   # , tuneLength = 20
   )
 

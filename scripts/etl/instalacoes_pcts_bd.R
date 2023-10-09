@@ -4,7 +4,7 @@ pacman::p_load(arrow)
 
 ##### FF #####
 # PASSO 1 - INSTALAR R TOOLS
-https://cran.r-project.org/bin/windows/Rtools/rtools43/files/rtools43-5550-5548.exe
+# https://cran.r-project.org/bin/windows/Rtools/rtools43/files/rtools43-5550-5548.exe
 # PASSO 2 - INSTALAR E CARREGAR devtools
 pacman::p_load(devtools)
 # PASSO 3 - INSTALAR ffbase
@@ -20,8 +20,9 @@ install.packages("polars", repos = "https://rpolars.r-universe.dev")
 # PASSO 1 - INSTALAR O java 8 
 https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html
 
-# PASSO 2 - INSTALAR O sparklyr
+# PASSO 2 - INSTALAR E DEPOIS CARREGAR O sparklyr
 install.packages("sparklyr")
+library(sparklyr)
 
 # PASSO 3 - INSTALAR O Spark
 spark_install("3.5")
@@ -32,6 +33,6 @@ install.packages("https://cran.r-project.org/src/contrib/Archive/SparkR/SparkR_2
 # PASSO 5 - CARREGAR OS PACOTES SPARK
 pacman::p_load(SparkR, sparklyr)
 
-sc <- spark_connect(master = "local")
+sc <- spark_connect(master = "local", version = "3.5")
 
 spark_web(sc)
