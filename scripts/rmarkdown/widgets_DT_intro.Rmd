@@ -1,0 +1,93 @@
+---
+title: "DataTable (DT)"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    horizontal_layout: fill
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(
+  ## ETL
+  data.table, dplyr,
+  ## WIDGETS
+  DT
+  )
+
+instagram_unifafire <- fread('https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/bases_tratadas/instagram_unifafire.csv')
+```
+Iris
+================================
+
+```{r}
+iris %>% datatable(
+  # Título
+  caption = htmltools::tags$caption(
+    # estilo do título usando css
+    style = 'text-align: center; font-size: 18px; font-weight: bold;',
+    'Tabela 1: Base de Dados iris'),
+  # nomes das colunas
+  colnames = c('Tamanho da Sépala', 'Largura da Sépala', 'Tamanho da Pétala', 'Largura da Pétala', 'Espécie'),
+  filter = "top",
+  # extensões para serem acrescentadas
+  extensions = c('Buttons', 'ColReorder', 'Responsive'),
+  # as opções configuram efetivamente as extensões
+  options = list(
+    #
+    dom = 'Blfrtip',
+    # primeiro vamos configurar os botões, adicionando funcionalidades
+    buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+    # permite ao usuário reordenar as colunas
+    colReorder = TRUE,
+    # controla quantas linhas serão mostradas por página
+    pageLength = 50, 
+    # ativa o spinner (indicador de processamento)
+    processing = TRUE
+  )
+) %>% # podemos usar também formatações de estilo avançadas para as colunas
+  formatStyle(
+    'Petal.Length',
+    color = styleInterval(1.6, c('black', 'white')),
+    background = styleColorBar(iris$Petal.Length, 'lightblue')
+  )
+```
+
+FAFIRE
+================================
+
+### FAFIRE
+
+```{r}
+instagram_unifafire %>% datatable(
+  # Título
+  caption = htmltools::tags$caption(
+    # estilo do título usando css
+    style = 'text-align: center; font-size: 18px; font-weight: bold;',
+    'Tabela 2: Base de Dados instagram fafire'),
+  # extensões para serem acrescentadas
+  extensions = c('Buttons', 'ColReorder', 'Responsive'),
+  # as opções configuram efetivamente as extensões
+  options = list(
+    #
+    dom = 'Blfrtip',
+    # primeiro vamos configurar os botões, adicionando funcionalidades
+    buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+    # permite ao usuário reordenar as colunas
+    colReorder = TRUE,
+    # controla quantas linhas serão mostradas por página
+    pageLength = 50, 
+    # ativa o spinner (indicador de processamento)
+    processing = TRUE,
+    # controla as opções de busca
+    searchHighlight = TRUE,
+    search = list(
+      "caseInsensitive" = TRUE, # sensível a maiúsculas
+      "regex" = TRUE, # correspondência exata ou aproximada
+      "smart" = TRUE, # ativar IA para a pesquisa
+      "searchDelay" = 500, # tempo até iniciar a processar
+      "searchCols" = c(0) # especifica colunas a serem pesquisadas
+    )
+  )
+) 
+```
