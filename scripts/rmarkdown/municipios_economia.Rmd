@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 pacman::p_load(caret, corrplot, dplyr, DT, flexdashboard, lubridate, plotly, shiny, zoo) # carregar pacotes
 
-source('municipios_processamento.R')
+source('https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/scripts/rmarkdown/municipios_processamento.R')
 
 # mun_pe <- read.csv2('../../bases_tratadas/clusters_municipios_pe.csv')
 
@@ -91,11 +91,11 @@ Inputs {.sidebar}
 
 ```{r controle2, echo=FALSE, warning=FALSE, message=FALSE}
 
-radioButtons(inputId = 'radioB1', 'Selecione a RD', c('PERNAMBUCO', unique(levels(mun_pe$rd))), inline = F)
+radioButtons(inputId = 'radioB1', 'Selecione a RD', c('METROPOLITANA', unique(levels(mun_pe$rd))), inline = F)
 
-radioButtons(inputId = 'radioB2', 'Escolha o Total de Grupos', 1:6, inline = T)
+radioButtons(inputId = 'radioB2', 'Escolha o Total de Grupos', 1:6, inline = T, selected = 2)
 
-radioButtons(inputId = 'radioX1', 'Selecione os Indicadores',  names(mun_pe)[-c(1:3,7:9,15)], inline = F)
+radioButtons(inputId = 'radioX1', 'Selecione os Indicadores',  names(mun_pe)[-c(1:3,7:9,15)], inline = F, selected = "pib")
 
 radioButtons(inputId = 'radioY1', 'Selecione os Indicadores', names(mun_pe)[-c(1:3,7:9,15)], inline = F)
 ```
