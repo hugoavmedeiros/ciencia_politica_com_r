@@ -11,7 +11,7 @@ runtime: shiny
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-pacman::p_load(caret, corrplot, dplyr, DT, flexdashboard, funModeling, lubridate, plotly, shiny, zoo) # carregar pacotes
+pacman::p_load(caret, corrplot, dplyr, DT, flexdashboard, lubridate, plotly, shiny, zoo) # carregar pacotes
 
 source('municipios_processamento.R')
 
@@ -195,7 +195,7 @@ Row
 
 ```{r quali, echo=FALSE, warning=FALSE, message=FALSE}
 
-knitr::kable(status(mun_pe))
+# knitr::kable(status(mun_pe))
 
 ```
 
