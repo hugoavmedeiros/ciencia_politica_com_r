@@ -1,0 +1,27 @@
+---
+title: Terremotos Fiji
+output: html_document
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(crosstalk, d3scatter, dplyr, DT, leaflet)
+
+# Wrap data frame in SharedData
+quakes <- quakes %>% dplyr::mutate(
+  stations = as.factor(stations)
+)
+sd <- SharedData$new(quakes[sample(nrow(quakes), 200),])
+```
+
+```{r, warning=FALSE, out.width='100%', echo = FALSE, message = FALSE}
+
+filter_slider("mag", "Magnitude", sd, column=~mag, step=0.1, width=250)
+filter_checkbox("stations", "Stations", sd, ~stations, inline = TRUE)
+
+bscols(
+  leaflet(sd) %>% addTiles() %>% addMarkers(),
+  d3scatter(sd, ~depth, ~mag, ~factor(stations), width="100%"),
+  datatable(sd, extensions="Scroller", style="bootstrap", class="compact", width="100%",
+    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
+)
+```
