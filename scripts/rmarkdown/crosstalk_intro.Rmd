@@ -4,12 +4,13 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-pacman::p_load(crosstalk, d3scatter, dplyr, DT, leaflet)
+pacman::p_load(crosstalk, dplyr, DT, plotly)
 
 # Wrap data frame in SharedData
 quakes <- quakes %>% dplyr::mutate(
   stations = as.factor(stations)
 )
+
 sd <- SharedData$new(quakes[sample(nrow(quakes), 200),])
 ```
 
@@ -18,10 +19,27 @@ sd <- SharedData$new(quakes[sample(nrow(quakes), 200),])
 filter_slider("mag", "Magnitude", sd, column=~mag, step=0.1, width=250)
 filter_checkbox("stations", "Stations", sd, ~stations, inline = TRUE)
 
-bscols(
-  leaflet(sd) %>% addTiles() %>% addMarkers(),
-  d3scatter(sd, ~depth, ~mag, ~factor(stations), width="100%"),
-  datatable(sd, extensions="Scroller", style="bootstrap", class="compact", width="100%",
-    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
-)
+sd %>% plot_ly() %>% 
+  add_trace(lon = ~long, lat = ~lat
+          , type = "scattermapbox"
+          , text = ~stations
+          , alpha = 0.8
+          , mode = "marker"
+          , color = I("#1f77b4")
+          , hoverinfo = ~stations) %>%
+  layout(
+    mapbox = list(
+      style = 'open-street-map',
+      zoom = 3,
+      center = list(lon = 179.462, 
+                    lat = -20.64275))) %>% highlight(on = "plotly_selected"
+            , off = "plotly_deselect"
+            , color = 'red')
+  
+sd %>% plot_ly( x = ~depth, y = ~mag, color = ~stations)
+  
+sd %>% datatable(
+  filter = list(
+    position = 'bottom', clear = FALSE, plain = TRUE)
+  )
 ```
