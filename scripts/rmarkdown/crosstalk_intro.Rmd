@@ -5,19 +5,19 @@ output: html_document
 
 ```{r setup, include=FALSE}
 pacman::p_load(crosstalk, dplyr, DT, plotly)
-
-# Wrap data frame in SharedData
+  
 quakes <- quakes %>% dplyr::mutate(
   stations = as.factor(stations)
 )
 
-sd <- SharedData$new(quakes[sample(nrow(quakes), 200),])
+sd <- SharedData$new(quakes)
 ```
 
 ```{r, warning=FALSE, out.width='100%', echo = FALSE, message = FALSE}
 
 filter_slider("mag", "Magnitude", sd, column=~mag, step=0.1, width=250)
-filter_checkbox("stations", "Stations", sd, ~stations, inline = TRUE)
+
+filter_checkbox("stations", "Estações", sd, ~stations, inline = TRUE)
 
 sd %>% plot_ly() %>% 
   add_trace(lon = ~long, lat = ~lat
@@ -32,11 +32,9 @@ sd %>% plot_ly() %>%
       style = 'open-street-map',
       zoom = 3,
       center = list(lon = 179.462, 
-                    lat = -20.64275))) %>% highlight(on = "plotly_selected"
-            , off = "plotly_deselect"
-            , color = 'red')
+                    lat = -20.64275))) %>% highlight(on = "plotly_selected", off = "plotly_deselect", color = 'red')
   
-sd %>% plot_ly( x = ~depth, y = ~mag, color = ~stations)
+sd %>% plot_ly(x = ~depth, y = ~mag, color = ~stations)
   
 sd %>% datatable(
   filter = list(
