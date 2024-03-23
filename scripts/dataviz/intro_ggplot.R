@@ -14,7 +14,7 @@ iris %>% ggplot(aes(x = Sepal.Length)) + geom_histogram()
 iris %>% ggplot(aes(x = Sepal.Length)) + geom_density()
 
 ## Leitura base orçamento defesa brasil
-defesaBrasilLong <- readRDS('bases_tratadas/orcamento_defesa_brasil.rds')
+defesaBrasilLong <- read.csv2('https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/bases_tratadas/orcamento_defesa_brasil.csv')
 
 # Séries Temporais
 defesaBrasilLong %>% group_by(Ano) %>% summarise(Valor = sum(Valor)) %>% ggplot(aes(x = Ano, y = Valor)) + geom_line()
