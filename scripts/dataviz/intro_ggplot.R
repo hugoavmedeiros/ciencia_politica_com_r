@@ -2,23 +2,18 @@
 pacman::p_load(dplyr, ggplot2)
 
 # Gráfico de Caixas Univariado
-
 iris %>% ggplot(aes(y = Sepal.Length)) + geom_boxplot()
 
 # Gráfico de Caixas Multivariado
-
 iris %>% ggplot(aes(y = Sepal.Length, x = Species)) + geom_boxplot()
 
 # Histograma
-
 iris %>% ggplot(aes(x = Sepal.Length)) + geom_histogram()
 
 # Densidade
-
 iris %>% ggplot(aes(x = Sepal.Length)) + geom_density()
 
 ## Leitura base orçamento defesa brasil
-
 defesaBrasilLong <- readRDS('bases_tratadas/orcamento_defesa_brasil.rds')
 
 # Séries Temporais
