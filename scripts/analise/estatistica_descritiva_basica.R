@@ -1,30 +1,34 @@
+pacman::p_load(
+  tidyverse
+)
+
 ### Estatística Descritiva com R
 ## Tabela de frequência absoluta da variável Species da base iris
-table(iris$Species)
+iris %>% select(Species) %>% table() 
 
 ## Tabela de frequência relativa da variável Species da base iris
-prop.table(table(iris$Species))
+iris %>% select(Species) %>% table() %>% prop.table()
 
 ## Média da variável Sepal.Length da base iris
-mean(iris$Sepal.Length)
+iris$Sepal.Length %>% mean()
 
 ## Mediana da variável Sepal.Length da base iris
-median(iris$Sepal.Length)
+iris$Sepal.Length %>% median()
 
 ## Separatrizes da variável Sepal.Length da base iris
-quantile(iris$Sepal.Length, probs=0.75)
-quantile(iris$Sepal.Length, probs=0.10)
-quantile(iris$Sepal.Length, probs=0.95)
-boxplot(iris$Sepal.Length) # boxplot - gráfico que resume as sepatrizes
+iris$Sepal.Length %>% quantile(probs=0.75)
+iris$Sepal.Length %>% quantile(probs=0.10)
+iris$Sepal.Length %>% quantile(probs=0.99)
+iris$Sepal.Length %>% boxplot() # boxplot - gráfico que resume as sepatrizes
 
 ## Desvio-padrão da variável Sepal.Length da base iris
-sd(iris$Sepal.Length)
-plot(iris$Sepal.Length)
+iris$Sepal.Length %>% sd()
+iris$Sepal.Length %>% plot()
 
 ## Sumário descritivo básico das variáveis
-summary(iris)
+iris %>% summary()
 
 ## Sumário descritivo completo das variáveis usando o pacote fBasics
 pacman::p_load(fBasics)
-basicStats(iris[ , c(1:4)])
-hist(iris$Sepal.Length) # histograma - gráfico que permite conhecer a curva dos dados
+iris %>% select(1:4) %>% basicStats()
+iris$Sepal.Length %>% hist() # histograma - gráfico que permite conhecer a curva dos dados
