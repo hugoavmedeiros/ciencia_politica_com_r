@@ -12,22 +12,25 @@ pacman::p_load(
 ### ETL ###
 instagram_unifafire <- fread('https://raw.githubusercontent.com/hugoavmedeiros/ciencia_politica_com_r/master/bases_tratadas/instagram_unifafire.csv')
 
-str(instagram_unifafire)
+instagram_unifafire %>% str()
 
 # mudar o tipo de dado das colunas mes e turno para fator 
 instagram_unifafire <- instagram_unifafire %>% 
-  mutate_at( # mutate_at modifica colunas que já existem
+  mutate_at( 
   c('mes', 'turno'), 
-  as.factor) # muda tipo do dado para fator
+  as.factor) 
 
 # mudar o tipo de dado da coluna "Data" para date
 instagram_unifafire <- instagram_unifafire %>%
-  mutate_at( # mutate_at modifica colunas que já existem
+  mutate_at( 
     c('Data'), 
-    mdy) # muda o tipo de dado para Date, a partir do formato MM/DD/YY
+    mdy) 
 
 # converter mes para 
-instagram_unifafire$mes <- month(instagram_unifafire$Data, label = TRUE)
+instagram_unifafire <- instagram_unifafire %>%
+  mutate(
+    mes = month(Data, label = TRUE)
+  )
 
 ### AED ###
 ## AED NUMÉRICA ##
@@ -60,9 +63,10 @@ instagram_unifafire %>%
 # gráfico para visualizar a separação dos dados, inclusive por categoria
 # x deve ser um fator, y uma métrica e cor o fator usado em x
 bp_curtidas_turno <- instagram_unifafire %>% 
-  ggplot(aes(x=mes, y=Curtidas, color=mes)) + # mapeia os dados
-  geom_boxplot() # cria o boxplot
-ggplotly(bp_curtidas_turno) # torna o gráfico interativo
+  ggplot(aes(x=mes, y=Curtidas, color=mes)) +
+  geom_boxplot()
+
+bp_curtidas_turno %>% ggplotly() # torna o gráfico interativo
 
 # HISTOGRAMA #
 # gráfico de frequência, inclusive por categoria
@@ -71,7 +75,7 @@ ggplotly(bp_curtidas_turno) # torna o gráfico interativo
 hist_curtidas_turno <- instagram_unifafire %>% 
   ggplot(aes(x=Curtidas, color=turno)) + 
   geom_histogram(fill="white", position="identity") 
-ggplotly(hist_curtidas_turno) # torna o gráfico interativo
+hist_curtidas_turno %>% ggplotly() # torna o gráfico interativo
 
 # DENSIDADE
 # gráfico de frequência suavizada, inclusive por categoria
@@ -79,7 +83,7 @@ ggplotly(hist_curtidas_turno) # torna o gráfico interativo
 dens_curtidas_turno <- instagram_unifafire %>% 
   ggplot(aes(x=Curtidas, color=turno)) +
   geom_density()
-ggplotly(dens_curtidas_turno) # torna o gráfico interativo
+dens_curtidas_turno %>% ggplotly() # torna o gráfico interativo
 
 # BARRAS
 # gráfico que apresenta os totais de uma categoria
@@ -87,7 +91,7 @@ ggplotly(dens_curtidas_turno) # torna o gráfico interativo
 barras_curtidas_mes <- instagram_unifafire %>% 
   ggplot(aes(turno)) +
   geom_bar(aes(weight = Curtidas, fill = turno)) + coord_flip()
-ggplotly(barras_curtidas_mes) # torna o gráfico interativo
+barras_curtidas_mes %>% ggplotly() # torna o gráfico interativo
 
 # SÉRIE TEMPORAL
 # gráfico que apresenta um número ao longo do tempo
@@ -95,7 +99,7 @@ ggplotly(barras_curtidas_mes) # torna o gráfico interativo
 st_curtidas_data <- instagram_unifafire %>% 
   ggplot(aes(x = Data, y = Curtidas)) + 
   geom_line(aes(color = turno))
-ggplotly(st_curtidas_data) # torna o gráfico interativo
+st_curtidas_data %>% ggplotly() # torna o gráfico interativo
 
 # DISPERSÃO
 # a primeira versão associa duas variáveis
@@ -104,11 +108,12 @@ sct_curtidas_comentarios <- instagram_unifafire %>%
   ggplot(aes(x=Curtidas, y=Comentários)) + 
   geom_point() + # cria os pontos
   geom_smooth() # cria a curva de associação
-ggplotly(sct_curtidas_comentarios) # torna o gráfico interativo
+
+sct_curtidas_comentarios %>% ggplotly() # torna o gráfico interativo
 
 # a segunda versão associa três variáveis, com a terceria indicando o tamanho da circunferência dos pontos
 bolha_curtidas_comentarios <- instagram_unifafire %>% 
   ggplot(aes(x=Curtidas, y=Comentários)) + 
   geom_point(aes(size=Visualizações)) + # tamanho dos pontos
   geom_smooth() # cria a curva de associação
-ggplotly(bolha_curtidas_comentarios) # torna o gráfico dinâmico
+bolha_curtidas_comentarios %>% ggplotly() # torna o gráfico dinâmico
