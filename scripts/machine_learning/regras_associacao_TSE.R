@@ -32,9 +32,7 @@ regras_estaduais <- estaduais_pe_2022 %>%
 
 ## limpar e organizar regras
 # três casas decimais
-regras_estaduais <- regras_estaduais %>% 
-  quality() %>% 
-  round(3)
+quality(regras_estaduais) <- round(quality(regras_estaduais), digits = 3)
 
 # organizar por lift
 regras_estaduais <- sort(regras_estaduais, by="lift") 
