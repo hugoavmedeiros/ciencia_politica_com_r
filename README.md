@@ -17,12 +17,11 @@ Materiais de diferentes cursos que usam a linguagem R para aplicar conhecimentos
 * Dataviz
 * Rmarkdown
 
-### Turmas atuais
+### Turmas Anteriores
+* 2024-01 Estatística Computacional com R, na Pós-graduação "BI, BA e Big Data aplicado a Negócios" da Faculdade Frassinetti do Recife (FAFIRE)
 * 2023-02 Tópicos Especiais: Machine Learning para Ciência Política (Mestrado e Doutroado), no Programa de Pós-graduação em Ciência Política da Universidade Federal de Pernambuco (PPGCP/UFPE)
 * 2023-02 Estatística Computacional com R, na Pós-graduação "BI, BA e Big Data aplicado a Negócios" da Faculdade Frassinetti do Recife (FAFIRE)
 * 2023-02 Aprendizagem de máquina e Mineração de Dados, na Pós-graduação "BI, BA e Big Data aplicado a Negócios" da Faculdade Frassinetti do Recife (FAFIRE)
-
-### Turmas Anteriores
 * 2023-01 Análise de Dados (Mestrado), no Programa de Pós-graduação em Ciência Política da Universidade Federal de Pernambuco (PPGCP/UFPE)
 * 2022-02 Estudos Avançados de Metodologia de Pesquisa (Doutorado),  no Programa de Pós-graduação em Ciência Política da Universidade Federal de Pernambuco (PPGCP/UFPE)
 * 2022-02 Tópicos Especiais de Metodologia (Mestrado), no Programa de Pós-graduação Profissional em Políticas Públicas da Universidade Federal de Pernambuco (PPGPP/UFPE). 
