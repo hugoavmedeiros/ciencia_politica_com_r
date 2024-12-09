@@ -13,14 +13,17 @@ energia_pe <- readxl::read_excel(
 energia_bp <- breakpoints(energia_pe$rural_mwh ~ energia_pe$indice)  # Detectar pontos de quebra
 summary(energia_bp)
 
+energia_q1 <- energia_bp$breakpoints[1]
+energia_q2 <- energia_bp$breakpoints[2]
+
 #### impacto ----
 ##### quebra 1 ----
-pre_energia_q1 <- c(1, energia_bp$breakpoints[1]-1)
-pos_energia_q2 <- c(energia_bp$breakpoints[1], energia_bp$breakpoints[2]-1)
+pre_energia_q1 <- c(1, energia_q1-1)
+pos_energia_q1 <- c(energia_q1, energia_q2-1)
 
 dados_q1 <- energia_pe %>%
   filter(
-    indice < energia_bp$breakpoints[2]
+    indice < energia_q2
   ) %>%
   pull(rural_mwh)
 
@@ -35,14 +38,15 @@ plot(impact_energia_q1)
 ##### quebra 2 ----
 pre_energia_q2 <- c(
   1, 
-  energia_bp$breakpoints[2]-energia_bp$breakpoints[1]-1)
+  energia_q2-energia_q1-1)
+
 pos_energia_q2 <- c(
-  energia_bp$breakpoints[2]-energia_bp$breakpoints[1], 
-  energia_pe %>% nrow()-energia_bp$breakpoints[1])
+  energia_q2-energia_q1, 
+  energia_pe %>% nrow()-energia_q1)
 
 dados_q2 <- energia_pe %>%
   filter(
-    indice >= energia_bp$breakpoints[1]+1
+    indice >= energia_q1+1
   ) %>%
   pull(rural_mwh)
 
