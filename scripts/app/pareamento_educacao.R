@@ -1,5 +1,5 @@
 #### pacotes ----
-pacman::p_load(cobalt, data.table, MatchIt, rbounds, sensemakr, tidyverse)
+pacman::p_load(cobalt, data.table, MatchIt, tidyverse)
 
 #### etl ----
 escolas_integrais <- fread(
@@ -33,6 +33,8 @@ integrais_pareadas <- match.data(pareamento_integrais)
 love.plot(pareamento_integrais)
 
 # análise gráfica da sobreposição
+plot(pareamento_integrais, type = "histogram")
+
 ggplot(integrais_pareadas, aes(x = distance, fill = as.factor(tratamento))) +
   geom_density(alpha = 0.5) +
   scale_fill_manual(values = c("red", "blue"), 
